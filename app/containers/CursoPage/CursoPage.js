@@ -1,9 +1,4 @@
-/*
- * FeaturePage
- *
- * List all the features
- */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Helmet } from 'react-helmet';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
@@ -16,23 +11,43 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 220,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
 }));
 
+const formDefault = {
+  codigoMec: '',
+  nome: '',
+  nivelAcademico: '',
+}
+
 export default function CursoPage () {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
+  const [form, setFormValues] = useState(formDefault);
+
+  const updateField = e => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setFormValues({
+      ...form,
+      [e.target.name]: value
+    })
+  }
+
+  const handleChange = name => event => {
+    setFormValues({ ...form, [name]: event.target.value });
+  };
+
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
 
   return (
-    <div className="feature-page">
+    <div className="page">
       <Helmet>
         <title>Curso</title>
 
@@ -47,6 +62,8 @@ export default function CursoPage () {
 
         <FormControl variant="outlined" className={classes.formControl}>
           <TextField
+            value={form.codigoMec}
+            onChange={handleChange('codigoMec')}
             id="outlined-name"
             label="Código e-MEC"
             margin="normal"
@@ -57,6 +74,8 @@ export default function CursoPage () {
 
         <FormControl variant="outlined" className={classes.formControl}>
           <TextField
+            value={form.nome}
+            onChange={handleChange('nome')}
             id="outlined-name"
             label="Nome do curso"
             margin="normal"
@@ -67,17 +86,16 @@ export default function CursoPage () {
 
         <FormControl required variant="outlined" className={classes.formControl}>
           <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
-            Age
+            Nível Acadêmico
           </InputLabel>
           <Select
-            // value={values.age}
-            // onChange={handleChange}
+            value={form.nivelAcademico}
+            onChange={handleChange('nivelAcademico')}
             labelWidth={labelWidth}
             inputProps={{
               name: 'age',
               id: 'outlined-age-simple',
             }}
-
           >
             <MenuItem value="">
               <em>None</em>
