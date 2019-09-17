@@ -4,34 +4,48 @@
  * List all the features
  */
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { Helmet } from 'react-helmet';
-import { Button, TextField } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import './style.scss';
 
-export default class CursoPage extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
-  // Since state and props are static,
-  // there's no need to re-render this component
-  shouldComponentUpdate() {
-    return false;
-  }
+export default function CursoPage () {
+  const classes = useStyles();
+  const inputLabel = React.useRef(null);
+  const [labelWidth, setLabelWidth] = React.useState(0);
+  React.useEffect(() => {
+    setLabelWidth(inputLabel.current.offsetWidth);
+  }, []);
 
-  render() {
-    return (
-      <div className="feature-page">
-        <Helmet>
-          <title>Curso</title>
+  return (
+    <div className="feature-page">
+      <Helmet>
+        <title>Curso</title>
 
-          <meta
-            name="description"
-            content="Curso page of React.js Boilerplate application"
-          />
-        </Helmet>
-        <h1>Curso</h1>
+        <meta
+          name="description"
+          content="Curso page of React.js Boilerplate application"
+        />
+      </Helmet>
+      <h1>Curso</h1>
 
-        <form>
+      <form className={classes.root} autoComplete="off">
 
+        <FormControl variant="outlined" className={classes.formControl}>
           <TextField
             id="outlined-name"
             label="Código e-MEC"
@@ -39,7 +53,9 @@ export default class CursoPage extends React.Component {
             variant="outlined"
             required
           />
+        </FormControl>
 
+        <FormControl variant="outlined" className={classes.formControl}>
           <TextField
             id="outlined-name"
             label="Nome do curso"
@@ -47,10 +63,33 @@ export default class CursoPage extends React.Component {
             variant="outlined"
             required
           />
+        </FormControl>
 
-        </form>
+        <FormControl required variant="outlined" className={classes.formControl}>
+          <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
+            Age
+          </InputLabel>
+          <Select
+            // value={values.age}
+            // onChange={handleChange}
+            labelWidth={labelWidth}
+            inputProps={{
+              name: 'age',
+              id: 'outlined-age-simple',
+            }}
 
-      </div>
-    );
-  }
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
+
+      </form>
+
+    </div>
+  );
 }
