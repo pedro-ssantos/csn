@@ -1,17 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@material-ui/core';
 import './style.scss';
-import { makeStyles } from '@material-ui/core/styles';
 import CampoSelect from './Components/CampoSelect';
 import CampoTexto from './Components/CampoTexto';
-
 
 const formDefault = {
   codigoMec: '',
