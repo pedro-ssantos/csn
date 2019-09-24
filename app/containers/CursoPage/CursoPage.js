@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
 import CampoSelect from './Components/CampoSelect';
 import CampoTexto from './Components/CampoTexto';
+import axios from 'axios';
 
 const formDefault = {
   codigoMec: '',
@@ -43,6 +44,23 @@ export default function CursoPage() {
       setFormValues({ ...form, [name]: event.target.value });
     };
   };
+
+  useEffect(() => {
+    async function getForm() {
+      try {
+        const formPermissionId = window.location.pathname.split('/')[2];
+        const resFormPermission = await axios.get('/api/formPermission/'+formPermissionId);
+        const resForm = await axios.get('/api/form/'+resFormPermission.data.formId);
+        const formDb = resForm.data;
+        let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
+        formDefaultNew.nome = formDb.nome;
+        setFormValues(formDefaultNew)
+      } catch (error) {
+        alert('Formulário desconhecido')
+      }
+    }
+    getForm();
+  }, [])
 
   return (
     <div className="page">
