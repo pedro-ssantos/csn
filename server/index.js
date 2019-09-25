@@ -1,6 +1,7 @@
 /* eslint consistent-return:0 */
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const { resolve } = require('path');
 const logger = require('./util//logger');
 
@@ -10,6 +11,7 @@ const setup = require('./middlewares/frontendMiddleware');
 const routes = require('./routes');
 const app = express();
 
+app.use(bodyParser.json());
 app.use('/api', routes);
 
 // In production we need to pass these values in instead of relying on webpack
