@@ -16,9 +16,9 @@ const mongoConnect = async() => {
 
 mongoConnect()
 
-router.get('/form/:id', async (req, res, next) => {
+router.get('/form/:formId', async (req, res, next) => {
   try {
-    let item = await db.collection('form').findOne({_id: ObjectID(req.params['id'])})
+    const item = await db.collection('form').findOne({_id: ObjectID(req.params['id'])})
     if (item == null) {
       res.status(404).send()
     } else {
@@ -29,9 +29,18 @@ router.get('/form/:id', async (req, res, next) => {
   }
 })
 
-router.get('/formPermission/:id', async (req, res, next) => {
+router.put('/form/:formPermissionId', async (req, res, next) => {
   try {
-    let item = await db.collection('formPermission').findOne({_id: ObjectID(req.params['id'])})
+    await formSave(req.body, req.params['formPermissionId'])
+    res.status(200).send()
+  } catch (error) {
+    res.status(400).send()
+  }
+})
+
+router.get('/formPermission/:formPermissionId', async (req, res, next) => {
+  try {
+    const item = await db.collection('formPermission').findOne({_id: ObjectID(req.params['formPermissionId'])})
     if (item == null) {
       res.status(404).send()
     } else {
@@ -41,5 +50,14 @@ router.get('/formPermission/:id', async (req, res, next) => {
     res.status(404).send()
   }
 })
+
+const formSave = async (obj, formPermissionId) => {
+  const formPermission = await db.collection('formPermission').findOne({_id: ObjectID(formPermissionId)})
+  const form = await db.collection('form').findOne({_id: ObjectID(formPermission.formId)})
+  console.log('formSave')
+  console.log('formPermission', formPermission)
+  console.log('form', form)
+  console.log('obj', obj)
+}
 
 module.exports = router
