@@ -19,6 +19,7 @@ const mongoConnect = async() => {
 mongoConnect()
 
 router.all('/*', async(req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const url = req.url.split('/')
   let color
     switch (req.method) {
