@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import './style.scss';
 import CampoSelect from './Components/CampoSelect';
 import CampoTexto from './Components/CampoTexto';
+import {TextField} from '@material-ui/core';
 import apiService from './../../services/apiService';
 
 const formDefault = {
@@ -30,20 +31,14 @@ const formDefault = {
 export default function CursoPage() {
   const [form, setFormValues] = useState(formDefault);
 
-  const updateField = (e) => {
-    const value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  const updateField = e => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    console.log(e.target.name, value)
     setFormValues({
       ...form,
-      [e.target.name]: value,
-    });
-  };
-
-  const handleChange = name => {
-    event => {
-      setFormValues({ ...form, [name]: event.target.value });
-    };
-  };
+      [e.target.name]: value
+    })
+  }
 
   useEffect(() => {
     async function getForm() {
@@ -77,15 +72,16 @@ export default function CursoPage() {
       <form autoComplete="off">
         <div>
           <CampoTexto
+            name="nome"
             value={form.nome}
-            handleChange={handleChange('nome')}
+            onChange={updateField}
             label="nome do curso"
           />
         </div>
         <div>
           <CampoSelect
             value={form.codigoMec}
-            onChange={handleChange('codigoMec')}
+            onChange={updateField}
             label="Código e-MEC"
             categorias={['Graduação', 'Sequencia de formação específica']}
           />

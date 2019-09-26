@@ -6,7 +6,8 @@ export default function CampoTexto(props) {
   return (
     <TextField
       value={props.value}
-      onChange={props.handleChange}
+      onChange={props.onChange}
+      name={props.name}
       id="outlined-name"
       label={props.label}
       margin="normal"
