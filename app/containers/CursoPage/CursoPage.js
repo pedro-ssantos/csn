@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import './style.scss';
 import CampoSelect from './Components/CampoSelect';
 import CampoTexto from './Components/CampoTexto';
-import axios from 'axios';
+import apiService from './../../services/apiService';
 
 const formDefault = {
   codigoMec: '',
@@ -49,8 +49,8 @@ export default function CursoPage() {
     async function getForm() {
       try {
         const formPermissionId = window.location.pathname.split('/')[2];
-        const resFormPermission = await axios.get('/api/formPermission/'+formPermissionId);
-        const resForm = await axios.get('/api/form/'+resFormPermission.data.formId);
+        const resFormPermission = await apiService.request('get', 'formPermission/'+formPermissionId);
+        const resForm = await apiService.request('get', 'form/'+resFormPermission.data.formId);
         const formDb = resForm.data;
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
         formDefaultNew.nome = formDb.nome;
