@@ -65,6 +65,7 @@ router.put('/form/:formPermissionId', async (req, res, next) => {
     await formSave(req.body, req.params['formPermissionId'])
     res.status(200).send()
   } catch (error) {
+    console.log(error)
     res.status(400).send()
   }
 })
@@ -85,10 +86,44 @@ router.get('/formPermission/:formPermissionId', async (req, res, next) => {
 const formSave = async (obj, formPermissionId) => {
   const formPermission = await db.collection('formPermission').findOne({_id: ObjectID(formPermissionId)})
   const form = await db.collection('form').findOne({_id: ObjectID(formPermission.formId)})
+  let objUpdate = {}
   // console.log('formSave')
   // console.log('formPermission', formPermission)
   // console.log('form', form)
   // console.log('obj', obj)
+  for (const [field, value] of Object.entries(obj)) {
+    if (field === '_id') {
+      continue
+    }
+    if (hasPermission(field, formPermission)) {
+      objUpdate[field] = value
+    } else {
+      console.log(field, 'nao tem permissao')
+    }
+  }
+
+  // console.log(objUpdate)
+  if (Object.entries(objUpdate).length === 0 && objUpdate.constructor === Object) {
+    return
+  } else {
+    db.collection('form').update({_id:form._id}, {$set:objUpdate}, (err, result) => {
+      if (err)
+        console.log(err)
+    })
+  }
+}
+
+const hasPermission = (field, formPermission) => {
+  if (formPermission.responsible === 'pei') {
+    return true;
+  } else {
+    for (const formPermissionField of formPermission.fields) {
+      if (formPermissionField.id == field && formPermissionField.permission == 'update') {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 module.exports = router
