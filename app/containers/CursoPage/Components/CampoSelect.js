@@ -22,7 +22,7 @@ export default function CampoSelect(props) {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
   const menus = props.categorias.map(categoria => (
-    <MenuItem key={categoria.toString()}>{categoria}</MenuItem>
+    <MenuItem key={categoria.toString()} value={categoria.toString()}>{categoria}</MenuItem>
   ));
 
   return (
@@ -32,15 +32,15 @@ export default function CampoSelect(props) {
       </InputLabel>
       <Select
         value={props.value}
-        onChange={props.handleChange}
+        onChange={props.onChange}
         labelWidth={labelWidth}
         inputProps={{
-          name: 'age',
+          name: props.name,
           id: 'outlined-age-simple',
         }}
       >
         <MenuItem value="">
-          <em>None</em>
+          <em>Selecione</em>
         </MenuItem>
         {menus}
       </Select>

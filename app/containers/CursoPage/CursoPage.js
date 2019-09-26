@@ -33,7 +33,6 @@ export default function CursoPage() {
 
   const updateField = e => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    console.log(e.target.name, value)
     setFormValues({
       ...form,
       [e.target.name]: value
@@ -75,11 +74,12 @@ export default function CursoPage() {
             name="nome"
             value={form.nome}
             onChange={updateField}
-            label="nome do curso"
+            label="Nome do curso"
           />
         </div>
         <div>
           <CampoSelect
+            name="codigoMec"
             value={form.codigoMec}
             onChange={updateField}
             label="Código e-MEC"
