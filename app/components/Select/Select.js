@@ -1,9 +1,9 @@
 import React from 'react';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
-import '../style.scss';
+import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import { Select as SelectMaterial } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-export default function CampoSelect(props) {
+export default function Select(props) {
   const [labelWidth, setLabelWidth] = React.useState(0);
   const useStyles = makeStyles(theme => ({
     root: {
@@ -30,7 +30,7 @@ export default function CampoSelect(props) {
       <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
         {props.label}
       </InputLabel>
-      <Select
+      <SelectMaterial
         value={props.value}
         onChange={props.onChange}
         labelWidth={labelWidth}
@@ -43,7 +43,7 @@ export default function CampoSelect(props) {
           <em>Selecione</em>
         </MenuItem>
         {menus}
-      </Select>
+      </SelectMaterial>
     </FormControl>
   );
 }

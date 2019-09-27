@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
-import CampoSelect from './Components/CampoSelect';
-import CampoTexto from './Components/CampoTexto';
-import {TextField} from '@material-ui/core';
+import Select from './../../components/Select';
+import TextField from './../../components/TextField';
 import apiService from './../../services/apiService';
 
 const formDefault = {
@@ -70,7 +69,7 @@ export default function CursoPage() {
 
       <form autoComplete="off">
         <div>
-          <CampoTexto
+          <TextField
             name="nome"
             value={form.nome}
             onChange={updateField}
@@ -78,7 +77,7 @@ export default function CursoPage() {
           />
         </div>
         <div>
-          <CampoSelect
+          <Select
             name="codigoMec"
             value={form.codigoMec}
             onChange={updateField}
