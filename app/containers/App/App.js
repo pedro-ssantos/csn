@@ -15,6 +15,12 @@ import CursoPage from 'containers/CursoPage/Loadable';
 import DiscentePage from 'containers/DiscentePage/Loadable';
 import DocentePage from 'containers/DocentePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+
+// Admin
+import AdminPage from 'containers/Admin/AdminPage/Loadable';
+import AdminFormPage from 'containers/Admin/FormPage/Loadable';
+
+// components
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 import './style.scss';
@@ -30,6 +36,8 @@ const App = () => (
     <Header />
     <Switch>
       <Route exact path="/" component={HomePage} />
+      <Route exact path="/admin" component={AdminPage} />
+      <Route exact path="/admin/form" component={AdminFormPage} />
       <Route path="/curso" component={CursoPage} />
       <Route path="/discente" component={DiscentePage} />
       <Route path="/docente" component={DocentePage} />
