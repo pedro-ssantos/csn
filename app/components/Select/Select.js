@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { Select as SelectMaterial } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 export default function Select(props) {
   const [labelWidth, setLabelWidth] = React.useState(0);
+  const [options, setOptions] = React.useState([]);
   const useStyles = makeStyles(theme => ({
     root: {
       display: 'flex',
@@ -21,9 +22,12 @@ export default function Select(props) {
   }));
   const classes = useStyles();
   const inputLabel = React.useRef(null);
-  const menus = props.categorias.map(categoria => (
-    <MenuItem key={categoria.toString()} value={categoria.toString()}>{categoria}</MenuItem>
-  ));
+
+  useEffect(() => {
+    if (props.options) {
+      setOptions(props.options);
+    }
+  }, [props.options]);
 
   return (
     <FormControl required variant="outlined" className={classes.formControl}>
@@ -42,7 +46,9 @@ export default function Select(props) {
         <MenuItem value="">
           <em>Selecione</em>
         </MenuItem>
-        {menus}
+        {options.map(option => (
+          <MenuItem key={option.key} value={option.key}>{option.label}</MenuItem>
+        ))}
       </SelectMaterial>
     </FormControl>
   );
