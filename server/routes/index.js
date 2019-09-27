@@ -60,6 +60,21 @@ router.get('/form/:formId', async (req, res, next) => {
   }
 })
 
+router.get('/formConfig', async (req, res, next) => {
+  console.log('get /form', req.query)
+  let where = {}
+  if (req.query['type']) {
+    where.type = req.query['type']
+  }
+  try {
+    console.log('where', where)
+    const forms = await db.collection('formPermission').find(where).toArray()
+    res.status(200).json(forms)
+  } catch (error) { console.log(error)
+    res.status(404).send()
+  }
+})
+
 router.put('/form/:formPermissionId', async (req, res, next) => {
   try {
     await formSave(req.body, req.params['formPermissionId'])

@@ -4,8 +4,31 @@ import './style.scss';
 import apiService from './../../../services/apiService';
 
 export default function FormPage() {
+
+  const [formType, setFormType] = useState();
+  const [title, setTitle] = useState();
+
   useEffect(() => {
-    async function getForm() {
+    switch (findGetParameter('type')) {
+      case 'curso':
+        setFormType('curso');
+        setTitle('Cursos');
+        break;
+      case 'discente':
+        setFormType('discente');
+        setTitle('Discente');
+        break;
+      case 'docente':
+        setFormType('docente');
+        setTitle('Docentes');
+        break;
+      default:
+        alert('Não foi possível identificar o tipo do formulário desejado');
+        break;
+    }
+
+    async function getForm(formType) {
+      console.log('getForm', formType)
       try {
         const formPermissionId = window.location.pathname.split('/')[2];
         const resFormPermission = await apiService.request(
@@ -24,8 +47,21 @@ export default function FormPage() {
         alert('Formulário desconhecido');
       }
     }
-    // getForm();
+    getForm(findGetParameter('type'));
   }, []);
+
+  const findGetParameter = (parameterName) => {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+          tmp = item.split("=");
+          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+  }
 
   return (
     <div className="page">
@@ -37,7 +73,7 @@ export default function FormPage() {
         />
       </Helmet>
       <h1>Admin - Formulários</h1>
-      <h3>Cursos</h3>
+      <h3>{title}</h3>
     </div>
   );
 }
