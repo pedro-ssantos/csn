@@ -36,7 +36,7 @@ export default function Select(props) {
       </InputLabel>
       <SelectMaterial
         value={props.value}
-        onChange={props.onChange}
+        onChange={props.handleChange}
         labelWidth={labelWidth}
         inputProps={{
           name: props.name,
@@ -47,7 +47,9 @@ export default function Select(props) {
           <em>Selecione</em>
         </MenuItem>
         {options.map(option => (
-          <MenuItem key={option.key} value={option.key}>{option.label}</MenuItem>
+          <MenuItem key={option.key} value={option.key}>
+            {option.label}
+          </MenuItem>
         ))}
       </SelectMaterial>
     </FormControl>

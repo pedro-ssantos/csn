@@ -4,8 +4,9 @@ import { TextField as TextFieldMaterial } from '@material-ui/core';
 export default function TextField(props) {
   return (
     <TextFieldMaterial
+      disabled={props.disabled}
       value={props.value}
-      onChange={props.onChange}
+      onChange={props.handleChange}
       name={props.name}
       id="outlined-name"
       label={props.label}
