@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import './style.scss';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
+import TableYesNo from './../../components/TableYesNo';
 import apiService from './../../services/apiService';
 import FormCursoDetails from './FormCursoDetails';
 
@@ -56,14 +57,14 @@ export default function CursoPage() {
   useEffect(() => {
     async function getForm() {
       try {
-        const formPermissionId = window.location.pathname.split('/')[2];
-        const resFormPermission = await apiService.request(
+        const formConfigId = window.location.pathname.split('/')[2];
+        const resFormConfig = await apiService.request(
           'get',
-          'formPermission/' + formPermissionId,
+          'formConfig/' + formConfigId,
         );
         const resForm = await apiService.request(
           'get',
-          'form/' + resFormPermission.data.formId,
+          'form/' + resFormConfig.data.formId,
         );
         const formDb = resForm.data;
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
@@ -101,13 +102,27 @@ export default function CursoPage() {
 
         <div>
           <ChipSelect
-          laboratorios={laboratorios}
-          setLaboratorios={setLaboratorios}
-          label="Laboratórios"
-          options={[
-            {key:'labhard', value:'labhard', label:'Laboratório de Hardware'},
-            {key:'fislab', value:'fislab', label:'Laboratório de Física'}
-          ]}/>
+            laboratorios={laboratorios}
+            setLaboratorios={setLaboratorios}
+            label="Laboratórios"
+            options={[
+              {
+                key: 'labhard',
+                value: 'labhard',
+                label: 'Laboratório de Hardware',
+              },
+              {
+                key: 'fislab',
+                value: 'fislab',
+                label: 'Laboratório de Física',
+              },
+            ]}
+          />
+        </div>
+        <div>
+          <TableYesNo 
+          tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+          />
         </div>
       </form>
     </div>
