@@ -1,15 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
-import './style.scss';
 import apiService from './../../../services/apiService';
+import { Helmet } from 'react-helmet';
+import LogDialog from './../../../components/LogDialog';
+import moment from 'moment';
+import TableForm from './../../../components/TableForm';
+import './style.scss';
 
 export default function FormPage() {
 
   const [formType, setFormType] = useState();
   const [title, setTitle] = useState();
+  const [columns, setColumns] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [logRows, setLogRows] = useState([]);
+  const [logDialogOpened, setLogDialogOpened] = React.useState();
+
+  const logDialogHandleOpen = async() => {
+    console.log('logDialogHandleOpen')
+    try {
+      const res = await apiService.request(
+        'get',
+        'formLog/5d926c8b5744e645d10dcc1d',
+      );
+      setLogRows(res.data);
+      setLogDialogOpened(true);
+    } catch (error) {
+      alert('Erro ao buscar histórico de mudanças');
+    }
+  };
+
+  const logDialogHandleClose = () => {
+    setLogDialogOpened(false);
+  };
 
   useEffect(() => {
-    switch (findGetParameter('type')) {
+
+    const period = findGetParameter('period')
+    const type = findGetParameter('type')
+    // console.log('period', period)
+    // console.log('type', type)
+
+    switch (type) {
       case 'curso':
         setFormType('curso');
         setTitle('Cursos');
@@ -27,27 +58,29 @@ export default function FormPage() {
         break;
     }
 
-    async function getForm(formType) {
-      console.log('getForm', formType)
+    async function getForm() {
+      let where = []
+      if (period != null){
+        where.push('period='+period)
+      }
+      if (type != null){
+        where.push('type='+type)
+      }
       try {
-        const formPermissionId = window.location.pathname.split('/')[2];
-        const resFormPermission = await apiService.request(
-          'get',
-          'formPermission/' + formPermissionId,
-        );
         const resForm = await apiService.request(
           'get',
-          'form/' + resFormPermission.data.formId,
+          'form' + '?'+where.join('&'),
         );
         const formDb = resForm.data;
-        let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
-        formDefaultNew.nome = formDb.nome;
-        setFormValues(formDefaultNew);
+        setColumns(['Nome', 'Período', 'Validade']);
+        setRows(formDb.map(form => {
+          return [form.nome, form.period, moment(form.deadline).format('DD/MM/YY')]
+        }));
       } catch (error) {
         alert('Formulário desconhecido');
       }
     }
-    getForm(findGetParameter('type'));
+    getForm();
   }, []);
 
   const findGetParameter = (parameterName) => {
@@ -72,8 +105,10 @@ export default function FormPage() {
           content="Forms"
         />
       </Helmet>
-      <h1>Admin - Formulários</h1>
+      <h1>Formulários</h1>
       <h3>{title}</h3>
+      <TableForm columns={columns} rows={rows} logDialogHandleOpen={logDialogHandleOpen} />
+      <LogDialog open={logDialogOpened} rows={logRows} logDialogHandleOpen={logDialogHandleOpen} logDialogHandleClose={logDialogHandleClose} />
     </div>
   );
 }

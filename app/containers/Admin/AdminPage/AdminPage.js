@@ -13,9 +13,9 @@ export default function AdminPage() {
       </Helmet>
       <h1>Admin</h1>
       <ul>
-        <li><a href="/admin/form?type=curso">Cursos</a></li>
-        <li><a href="/admin/form?type=discente">Discentes</a></li>
-        <li><a href="/admin/form?type=docente">Docentes</a></li>
+        <li><a href="/admin/form?period=2019&type=curso">Cursos</a></li>
+        <li><a href="/admin/form?period=2019&type=discente">Discentes</a></li>
+        <li><a href="/admin/form?period=2019&type=docente">Docentes</a></li>
       </ul>
     </div>
   );

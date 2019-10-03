@@ -47,6 +47,33 @@ router.all('/*', async(req, res, next) => {
   next()
 })
 
+router.get('/form', async (req, res, next) => {
+  let where = {}
+  if (req.query['period']) {
+    where.period = req.query['period']
+  }
+  if (req.query['type']) {
+    where.type = req.query['type']
+  }
+  try {
+    const formConfig = await db.collection('formConfig').find(where).toArray()
+    const formIds = formConfig.map(form => {
+      return form.formId
+    })
+    const whereFormIds = formIds.length > 0 ? {_id: { $in : formIds }} : {}
+    const forms = await db.collection('form').find(whereFormIds).sort({ nome : 1 }).toArray()
+    res.status(200).json(forms.map(form => {
+      return {
+        deadline: formConfig[0].deadline,
+        nome: form.nome,
+        period: formConfig[0].period,
+      }
+    }))
+  } catch (error) { console.log(error)
+    res.status(404).send()
+  }
+})
+
 router.get('/form/:formId', async (req, res, next) => {
   try {
     const form = await db.collection('form').findOne({_id: ObjectID(req.params['formId'])})
@@ -61,23 +88,21 @@ router.get('/form/:formId', async (req, res, next) => {
 })
 
 router.get('/formConfig', async (req, res, next) => {
-  console.log('get /form', req.query)
   let where = {}
   if (req.query['type']) {
     where.type = req.query['type']
   }
   try {
-    console.log('where', where)
-    const forms = await db.collection('formPermission').find(where).toArray()
+    const forms = await db.collection('formConfig').find(where).toArray()
     res.status(200).json(forms)
   } catch (error) { console.log(error)
     res.status(404).send()
   }
 })
 
-router.put('/form/:formPermissionId', async (req, res, next) => {
+router.put('/form/:formConfigId', async (req, res, next) => {
   try {
-    await formSave(req.body, req.params['formPermissionId'])
+    await formSave(req.body, req.params['formConfigId'])
     res.status(200).send()
   } catch (error) {
     console.log(error)
@@ -85,9 +110,9 @@ router.put('/form/:formPermissionId', async (req, res, next) => {
   }
 })
 
-router.get('/formPermission/:formPermissionId', async (req, res, next) => {
+router.get('/formConfig/:formConfigId', async (req, res, next) => {
   try {
-    const item = await db.collection('formPermission').findOne({_id: ObjectID(req.params['formPermissionId'])})
+    const item = await db.collection('formConfig').findOne({_id: ObjectID(req.params['formConfigId'])})
     if (item == null) {
       res.status(404).send()
     } else {
@@ -98,42 +123,67 @@ router.get('/formPermission/:formPermissionId', async (req, res, next) => {
   }
 })
 
-const formSave = async (obj, formPermissionId) => {
-  const formPermission = await db.collection('formPermission').findOne({_id: ObjectID(formPermissionId)})
-  const form = await db.collection('form').findOne({_id: ObjectID(formPermission.formId)})
+router.get('/formLog/:formId', async (req, res, next) => {
+  try {
+    const collection = await db.collection('formLog').find({formId: ObjectID(req.params['formId'])}).toArray()
+    res.status(200).json(collection)
+  } catch (error) { 
+    res.status(404).send()
+  }
+})
+
+const formSave = async (obj, formConfigId) => {
+  const formConfig = await db.collection('formConfig').findOne({_id: ObjectID(formConfigId)})
+  const form = await db.collection('form').findOne({_id: ObjectID(formConfig.formId)})
   let objUpdate = {}
   // console.log('formSave')
-  // console.log('formPermission', formPermission)
+  // console.log('formConfig', formConfig)
   // console.log('form', form)
   // console.log('obj', obj)
   for (const [field, value] of Object.entries(obj)) {
     if (field === '_id') {
       continue
     }
-    if (hasPermission(field, formPermission)) {
+    if (hasPermission(field, formConfig)) {
       objUpdate[field] = value
     } else {
       console.log(field, 'nao tem permissao')
     }
   }
-
   // console.log(objUpdate)
   if (Object.entries(objUpdate).length === 0 && objUpdate.constructor === Object) {
     return
   } else {
-    db.collection('form').update({_id:form._id}, {$set:objUpdate}, (err, result) => {
-      if (err)
-        console.log(err)
-    })
+    try {
+      const resUpdate = await db.collection('form').update({_id:form._id}, {$set:objUpdate})
+      if (resUpdate.result.nModified > 0) {
+        logIt(form._id, formConfig.responsible, objUpdate)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
-const hasPermission = (field, formPermission) => {
-  if (formPermission.responsible === 'pei') {
+const logIt = async (formId, responsible, changes) => {
+  try {
+    await db.collection('formLog').insertOne({
+      formId: formId,
+      changes: changes,
+      date: moment().format('YYYY-MM-DD HH:mm:ss'),
+      responsible: responsible,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const hasPermission = (field, formConfig) => {
+  if (formConfig.responsible === 'pei') {
     return true;
   } else {
-    for (const formPermissionField of formPermission.fields) {
-      if (formPermissionField.id == field && formPermissionField.permission == 'update') {
+    for (const formConfigField of formConfig.fields) {
+      if (formConfigField.id == field && formConfigField.permission == 'update') {
         return true;
       }
     }
