@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import apiService from './../../../services/apiService';
 import { Helmet } from 'react-helmet';
 import LogDialog from './../../../components/LogDialog';
-import moment from 'moment';
 import TableForm from './../../../components/TableForm';
 import './style.scss';
 
@@ -16,7 +15,6 @@ export default function FormPage() {
   const [logDialogOpened, setLogDialogOpened] = React.useState();
 
   const logDialogHandleOpen = async() => {
-    console.log('logDialogHandleOpen')
     try {
       const res = await apiService.request(
         'get',
@@ -72,9 +70,9 @@ export default function FormPage() {
           'form' + '?'+where.join('&'),
         );
         const formDb = resForm.data;
-        setColumns(['Nome', 'Período', 'Validade']);
+        setColumns(['Nome', 'Período']);
         setRows(formDb.map(form => {
-          return [form.nome, form.period, moment(form.deadline).format('DD/MM/YY')]
+          return [form.id, form.nome, form.period]
         }));
       } catch (error) {
         alert('Formulário desconhecido');

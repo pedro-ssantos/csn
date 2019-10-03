@@ -64,6 +64,7 @@ router.get('/form', async (req, res, next) => {
     const forms = await db.collection('form').find(whereFormIds).sort({ nome : 1 }).toArray()
     res.status(200).json(forms.map(form => {
       return {
+        id: form._id,
         deadline: formConfig[0].deadline,
         nome: form.nome,
         period: formConfig[0].period,
@@ -87,19 +88,6 @@ router.get('/form/:formId', async (req, res, next) => {
   }
 })
 
-router.get('/formConfig', async (req, res, next) => {
-  let where = {}
-  if (req.query['type']) {
-    where.type = req.query['type']
-  }
-  try {
-    const forms = await db.collection('formConfig').find(where).toArray()
-    res.status(200).json(forms)
-  } catch (error) { console.log(error)
-    res.status(404).send()
-  }
-})
-
 router.put('/form/:formConfigId', async (req, res, next) => {
   try {
     await formSave(req.body, req.params['formConfigId'])
@@ -107,6 +95,25 @@ router.put('/form/:formConfigId', async (req, res, next) => {
   } catch (error) {
     console.log(error)
     res.status(400).send()
+  }
+})
+
+router.get('/formConfig', async (req, res, next) => {
+  try {
+    let where = {}
+    if (req.query['formId']) {
+      where.formId = ObjectID(req.query['formId'])
+    }
+    if (req.query['period']) {
+      where.period = req.query['period']
+    }
+    if (req.query['type']) {
+      where.type = req.query['type']
+    }
+    const forms = await db.collection('formConfig').find(where).sort({ type : 1, responsible : 1 }).toArray()
+    res.status(200).json(forms)
+  } catch (error) { console.log(error)
+    res.status(404).send()
   }
 })
 
