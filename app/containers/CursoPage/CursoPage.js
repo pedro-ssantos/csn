@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
+import Button from '@material-ui/core/Button';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
 import TableYesNo from './../../components/TableYesNo';
@@ -8,16 +9,16 @@ import apiService from './../../services/apiService';
 import FormCursoDetails from './FormCursoDetails';
 
 const formDefault = {
-  codigoMec: '',
+  codigoeMec: '',
   nome: '',
   nivelAcademico: '',
   grauAcademico: '',
-  atributoDeIngresso: '',
-  modalidadeDeEnsino: '',
-  CursoAlunoVinc: '',
-  situacaoFuncionamto: '',
-  tipoDeOferta: '',
-  CursoAlunoVinc2019: '',
+  atributoIngresso: '',
+  modalidadeEnsino: '',
+  alunoVinculado: '',
+  situacaoFuncionamento: '',
+  tipoOferta: '',
+  teveAlunoVinculado: '',
   turno: '',
   prazoMin: '',
   vagasNovas: '',
@@ -44,6 +45,22 @@ export default function CursoPage() {
     });
   };
 
+  const save = async () => {
+    console.log('form', form)
+    try {
+      const formConfigId = window.location.pathname.split('/')[2];
+      const res = await apiService.request(
+        'put',
+        'form/'+formConfigId,
+        {
+          data: form
+        }
+      );
+    } catch (error) {
+      alert('Erro ao salvar formulário');
+    }
+  }
+
   const nextStep = () => {
     const step = this.step;
     setStep({ step: step + 1 });
@@ -69,6 +86,16 @@ export default function CursoPage() {
         const formDb = resForm.data;
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
         formDefaultNew.nome = formDb.nome;
+        formDefaultNew.codigoeMec = formDb.codigoeMec;
+        formDefaultNew.nivelAcademico = formDb.nivelAcademico;
+        formDefaultNew.grauAcademico = formDb.grauAcademico;
+        formDefaultNew.atributoIngresso = formDb.atributoIngresso;
+        formDefaultNew.modalidadeEnsino = formDb.modalidadeEnsino;
+        formDefaultNew.situacaoFuncionamento = formDb.situacaoFuncionamento;
+        formDefaultNew.alunoVinculado = formDb.alunoVinculado;
+        formDefaultNew.tipoOferta = formDb.tipoOferta;
+        formDefaultNew.tipoOfertaQual = formDb.tipoOfertaQual;
+        formDefaultNew.teveAlunoVinculado = formDb.teveAlunoVinculado;
         setFormValues(formDefaultNew);
       } catch (error) {
         alert('Formulário desconhecido');
@@ -90,6 +117,11 @@ export default function CursoPage() {
       <h1>Curso</h1>
 
       <form autoComplete="off">
+
+        <Button variant="contained" color="primary" onClick={save}>
+          Salvar
+        </Button>
+
         <FormCursoDetails
           form={form}
           handleChange={updateField}

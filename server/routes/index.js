@@ -19,7 +19,6 @@ const mongoConnect = async() => {
 mongoConnect()
 
 router.all('/*', async(req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
   const url = req.url.split('/')
   let color
     switch (req.method) {
@@ -151,13 +150,13 @@ const formSave = async (obj, formConfigId) => {
     if (field === '_id') {
       continue
     }
-    if (hasPermission(field, formConfig)) {
+    if (formConfig.responsible === 'pei' || hasPermission(field, formConfig)) {
       objUpdate[field] = value
     } else {
       console.log(field, 'nao tem permissao')
     }
   }
-  // console.log(objUpdate)
+  console.log(objUpdate)
   if (Object.entries(objUpdate).length === 0 && objUpdate.constructor === Object) {
     return
   } else {
@@ -186,13 +185,9 @@ const logIt = async (formId, responsible, changes) => {
 }
 
 const hasPermission = (field, formConfig) => {
-  if (formConfig.responsible === 'pei') {
-    return true;
-  } else {
-    for (const formConfigField of formConfig.fields) {
-      if (formConfigField.id == field && formConfigField.permission == 'update') {
-        return true;
-      }
+  for (const formConfigField of formConfig.fields) {
+    if (formConfigField.id == field && formConfigField.permission == 'update') {
+      return true;
     }
   }
   return false;
