@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import './style.scss';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
-import TableYesNo from './../../components/TableYesNo';
+import TableAccessibilityResources from './../../components/TableAccessibilityResources';
 import apiService from './../../services/apiService';
 import FormCursoDetails from './FormCursoDetails';
 
@@ -29,8 +29,24 @@ const formDefault = {
   turnoExtra: '',
 };
 
+const accessibilityResourcesDefault = {
+  braile: false,
+  informaticaAcessivel: false,
+  materialTatil: false,
+  tradutorSinais: false,
+  materialSinais: false,
+  materialImpressoAcessivel: false,
+  materialAudio: false,
+  materialCaractereAmpliado: false,
+  recursoAcessComunicacao: false,
+  guiaInterprete: false,
+  insercaoDisciplinaSinais: false,
+  materialDigitalAcessivel: false,
+};
+
 export default function CursoPage() {
   const [form, setFormValues] = useState(formDefault);
+  const [accessibilityResources, setAccessibilityResources] = useState(accessibilityResourcesDefault);
   const [laboratorios, setLaboratorios] = React.useState([]);
 
   const [step, setStep] = useState(1);
@@ -88,6 +104,8 @@ export default function CursoPage() {
         />
       </Helmet>
       <h1>Curso</h1>
+      
+
 
       <form autoComplete="off">
         <FormCursoDetails
@@ -120,8 +138,10 @@ export default function CursoPage() {
           />
         </div>
         <div>
-          <TableYesNo 
+          <TableAccessibilityResources 
           tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+          resources={accessibilityResources}
+          setResources={setAccessibilityResources}
           />
         </div>
       </form>
