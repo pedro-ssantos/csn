@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import apiService from './../../services/apiService';
 import TextField from './../../components/TextField';
 import Select from './../../components/Select';
 import { Paper } from '@material-ui/core';
@@ -21,18 +22,19 @@ export default function FormCursoDetails(props) {
       <Paper>
         <h2>Informações do Curso</h2>
         <div>
+
           <TextField
             name="nome"
             value={form.nome}
-            handleChange={updateField}
+            handleChange={props.handleChange}
             label="Nome do curso"
           />
         </div>
         <div>
           <TextField
-            name="codigoMec"
-            value={form.codigoMec}
-            handleChange={updateField}
+            name="codigoeMec"
+            value={form.codigoeMec}
+            handleChange={props.handleChange}
             label="Código do curso e-MEC"
           />
         </div>
@@ -40,7 +42,7 @@ export default function FormCursoDetails(props) {
           <Select
             name="nivelAcademico"
             value={form.nivelAcademico}
-            handleChange={updateField}
+            handleChange={props.handleChange}
             label="Nível acadêmico"
             options={[
               { key: 'Graduação', label: 'Graduação' },
@@ -55,7 +57,7 @@ export default function FormCursoDetails(props) {
           <Select
             name="grauAcademico"
             value={form.grauAcademico}
-            handleChange={updateField}
+            handleChange={props.handleChange}
             label="Grau acadêmico"
             options={[
               { key: 'Bacharelado', label: 'Bacharelado' },
@@ -66,9 +68,9 @@ export default function FormCursoDetails(props) {
         </div>
         <div>
           <Select
-            name="atributoDeIngresso"
-            value={form.atributoDeIngresso}
-            handleChange={updateField}
+            name="atributoIngresso"
+            value={form.atributoIngresso}
+            handleChange={props.handleChange}
             label="Atributo de ingresso"
             options={[
               { key: 'Normal', label: 'Normal' },
@@ -86,9 +88,9 @@ export default function FormCursoDetails(props) {
         </div>
         <div>
           <Select
-            name="modalidadeDeEnsino"
-            value={form.modalidadeDeEnsino}
-            handleChange={updateField}
+            name="modalidadeEnsino"
+            value={form.modalidadeEnsino}
+            handleChange={props.handleChange}
             label="Modalidade de ensino"
             options={[
               { key: 'Presencial', label: 'Presencial' },
@@ -98,9 +100,9 @@ export default function FormCursoDetails(props) {
         </div>
         <div>
           <Select
-            name="CursoAlunoVinc"
-            value={form.CursoAlunoVinc}
-            handleChange={updateField}
+            name="alunoVinculado"
+            value={form.alunoVinculado}
+            handleChange={props.handleChange}
             label="Curso com Aluno vinculado"
             options={[
               { key: 'Sim', label: 'Sim' },
@@ -111,9 +113,9 @@ export default function FormCursoDetails(props) {
         </div>
         <div>
           <Select
-            name="situacaoFuncionamto"
-            value={form.situacaoFuncionamto}
-            handleChange={updateField}
+            name="situacaoFuncionamento"
+            value={form.situacaoFuncionamento}
+            handleChange={props.handleChange}
             label="Situação de Funcionamento"
             options={[
               { key: 'Extinto', label: 'Extinto' },
@@ -124,9 +126,9 @@ export default function FormCursoDetails(props) {
         </div>
         <div>
           <Select
-            name="tipoDeOferta"
-            value={form.tipoDeOferta}
-            handleChange={updateField}
+            name="tipoOferta"
+            value={form.tipoOferta}
+            handleChange={props.handleChange}
             label="Tipo de oferta"
             options={[
               { key: 'Regular', label: 'Regular' },
@@ -136,9 +138,9 @@ export default function FormCursoDetails(props) {
         </div>
         <div>
           <Select
-            name="CursoAlunoVinc2019"
-            value={form.CursoAlunoVinc2019}
-            handleChange={updateField}
+            name="teveAlunoVinculado"
+            value={form.teveAlunoVinculado}
+            handleChange={props.handleChange}
             label="Curso teve aluno vinculado em 2019?"
             options={[
               { key: 'Sim', label: 'Sim' },
