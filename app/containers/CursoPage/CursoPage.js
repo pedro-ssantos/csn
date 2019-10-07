@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
-import Button from '@material-ui/core/Button';
+import {
+  Button, 
+  Fade
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
 import TableAccessibilityResources from './../../components/TableAccessibilityResources';
@@ -45,12 +49,23 @@ const accessibilityResourcesDefault = {
   materialDigitalAcessivel: false,
 };
 
+const useStyles = makeStyles({
+  buttonsSteps: {
+    padding: '10px 0 10px',
+  },
+  buttonStep: {
+    marginRight: '10px',
+  },
+});
+
 export default function CursoPage() {
+  const classes = useStyles();
   const [form, setFormValues] = useState(formDefault);
   const [accessibilityResources, setAccessibilityResources] = useState(accessibilityResourcesDefault);
   const [laboratorios, setLaboratorios] = React.useState([]);
-
+  const [checked, setChecked] = React.useState(false);
   const [step, setStep] = useState(1);
+  const stepMax = 4;
 
   const updateField = e => {
     const value =
@@ -78,13 +93,11 @@ export default function CursoPage() {
   }
 
   const nextStep = () => {
-    const step = this.step;
-    setStep({ step: step + 1 });
+    setStep(step < stepMax-1 ? step+1 : stepMax);
   };
 
   const prevStep = () => {
-    const step = this.step;
-    setStep({ step: step - 1 });
+    setStep(step > 1 ? step-1 : step);
   };
 
   useEffect(() => {
@@ -124,7 +137,6 @@ export default function CursoPage() {
     <div className="page">
       <Helmet>
         <title>Curso</title>
-
         <meta
           name="description"
           content="Curso page of React.js Boilerplate application"
@@ -132,51 +144,78 @@ export default function CursoPage() {
       </Helmet>
       <h1>Curso</h1>
       
-
-
       <form autoComplete="off">
 
-        <Button variant="contained" color="primary" onClick={save}>
+        <Fade in={step === 1 ? true : false}>
+          <div>
+            {step === 1 && (
+              <FormCursoDetails
+                form={form}
+                handleChange={updateField}
+                nextStep={nextStep}
+              />
+            )}
+          </div>
+        </Fade>
+
+        <Fade in={step === 2 ? true : false} >
+          <div>
+            {step === 2 && (
+              <TableVagas form={form} handleChange={updateField} />
+            )}
+          </div>
+        </Fade>
+
+        <Fade in={step === 3 ? true : false} >
+          <div>
+            {step === 3 && (
+              <TableAccessibilityResources 
+              tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+              resources={accessibilityResources}
+              setResources={setAccessibilityResources}
+              />
+            )}
+          </div>
+        </Fade>
+
+        <Fade in={step === 4 ? true : false} >
+          <div>
+            {step === 4 && (
+              <ChipSelect
+                laboratorios={laboratorios}
+                setLaboratorios={setLaboratorios}
+                label="Laboratórios"
+                options={[
+                  {
+                    key: 'labhard',
+                    value: 'labhard',
+                    label: 'Laboratório de Hardware',
+                  },
+                  {
+                    key: 'fislab',
+                    value: 'fislab',
+                    label: 'Laboratório de Física',
+                  },
+                ]}
+              />
+            )}
+          </div>
+        </Fade>
+
+      </form>
+
+      <div className={classes.buttonsSteps}>
+        <Button variant="contained" onClick={prevStep} disabled={step<=1} className={classes.buttonStep} >
+          Voltar
+        </Button>
+        <Button variant="contained" onClick={nextStep} disabled={step==stepMax} className={classes.buttonStep}>
+          Próximo
+        </Button>
+        <Button variant="contained" color="primary" onClick={save} disabled={step!=stepMax} className={classes.buttonStep}>
           Salvar
         </Button>
+      </div>
 
-        <FormCursoDetails
-          form={form}
-          handleChange={updateField}
-          nextStep={nextStep}
-        />
-
-        <div>
-          <TableVagas form={form} handleChange={updateField} />
-        </div>
-
-        <div>
-          <ChipSelect
-            laboratorios={laboratorios}
-            setLaboratorios={setLaboratorios}
-            label="Laboratórios"
-            options={[
-              {
-                key: 'labhard',
-                value: 'labhard',
-                label: 'Laboratório de Hardware',
-              },
-              {
-                key: 'fislab',
-                value: 'fislab',
-                label: 'Laboratório de Física',
-              },
-            ]}
-          />
-        </div>
-        <div>
-          <TableAccessibilityResources 
-          tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-          resources={accessibilityResources}
-          setResources={setAccessibilityResources}
-          />
-        </div>
-      </form>
     </div>
   );
 }
