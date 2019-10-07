@@ -169,6 +169,7 @@ export default function CursoPage() {
             ]}
           />
         </div>
+        
         <div>
           <TableAccessibilityResources 
           tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
