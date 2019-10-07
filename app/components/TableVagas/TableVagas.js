@@ -99,7 +99,7 @@ export default function TableVagas(props) {
         <TableBody>
           {vagas.map(option => (
             <TableRow>
-              <TableCell>
+              <TableCell key={option.turno}>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -113,65 +113,65 @@ export default function TableVagas(props) {
                   style={{ width: 120 }}
                 />
               </TableCell>
-              <TableCell align="right" size="small">
+              <TableCell align="right" size="small" key={option.turno + "vagasNovas"}>
                 <TextField
-                  //disabled={!shift.matutino}
+                  disabled={!option.status}
                   name="a"
                   id="outlined-number"
-                  //value={shift.a}
+                  value={option.vagasNovas}
                   type="number"
                   margin="normal"
                   variant="outlined"
                   onChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small">
+              <TableCell align="right" size="small" key={option.turno + "vagasRemanecentes"}>
                 <TextField
-                  //disabled={!shift.matutino}
+                  disabled={!option.status}
                   name="b"
                   id="outlined-number"
-                  //value={shift.b}
+                  value={option.vagasRemanecentes}
                   type="number"
                   margin="normal"
                   variant="outlined"
                   onChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small">
+              <TableCell align="right" size="small" key={option.turno + "vagasProgramasEspeciais"}>
                 <TextField
-                  //disabled={!shift.matutino}
+                  disabled={!option.status}
                   id="outlined-number"
-                  value="1000000"
+                  value={option.vagasProgramasEspeciais}
                   type="number"
                   margin="normal"
                   variant="outlined"
                 />
               </TableCell>
-              <TableCell align="right" size="small">
+              <TableCell align="right" size="small" key={option.turno + "inscritosVagasNovas"}>
                 <TextField
-                  //disabled={!shift.matutino}
+                  disabled={!option.status}
                   id="outlined-number"
-                  value="1000"
+                  value={option.inscritosVagasNovas}
                   type="number"
                   margin="normal"
                   variant="outlined"
                 />
               </TableCell>
-              <TableCell align="right" size="small">
+              <TableCell align="right" size="small" key={option.turno + "inscritosVagasRemanecentes"}>
                 <TextField
-                  //disabled={!shift.matutino}
+                  disabled={!option.status}
                   id="outlined-number"
-                  value="1000"
+                  value={option.inscritosVagasRemanecentes}
                   type="number"
                   margin="normal"
                   variant="outlined"
                 />
               </TableCell>
-              <TableCell align="right" size="small">
+              <TableCell align="right" size="small" key={option.turno + "inscritosVagasProgramasEspeciais"}>
                 <TextField
-                  //disabled={!shift.matutino}
+                  disabled={!option.status}
                   id="outlined-number"
-                  value="1000"
+                  value={option.inscritosVagasProgramasEspeciais}
                   type="number"
                   margin="normal"
                   variant="outlined"
