@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormControl,
   InputLabel,
@@ -6,8 +6,10 @@ import {
   Chip,
   MenuItem,
   Input,
+  Paper,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import apiService from './../../services/apiService';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,8 +18,8 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
-    maxWidth: 300,
+    minWidth: 300,
+    // width: '100%'
   },
   chips: {
     display: 'flex',
@@ -42,11 +44,10 @@ const MenuProps = {
   },
 };
 
-
 function getStyles(name, laboratorios, theme) {
   return {
     fontWeight:
-    laboratorios.indexOf(name) === -1
+      laboratorios.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -56,41 +57,55 @@ export default function ChipSelect(props) {
   const classes = useStyles();
   const theme = useTheme();
   const { label } = props;
-  const { options } = props;
   const { laboratorios, setLaboratorios } = props;
-
+  const [options, setOptions] = useState([]);
 
   const handleChange = event => {
     setLaboratorios(event.target.value);
   };
 
+  useEffect(() => {
+    async function getForm() {
+      try {
+        const labsInfo = await apiService.request('get', 'laboratorio');
+        setOptions(labsInfo.data);
+      } catch (error) {
+        alert('Formulário desconhecido');
+        console.log('error', error);
+      }
+    }
+    getForm();
+  }, []);
+
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel htmlFor="select-multiple-chip">{label}</InputLabel>
-      <Select
-        multiple
-        value={laboratorios}
-        onChange={handleChange}
-        input={<Input id="select-multiple-chip" />}
-        renderValue={selected => (
-          <div className={classes.chips}>
-            {selected.map(value => (
-              <Chip key={value} label={value} className={classes.chip} />
-            ))}
-          </div>
-        )}
-        MenuProps={MenuProps}
-      >
-        {options.map(option => (
-          <MenuItem
-            key={option.key}
-            value={option.value}
-            style={getStyles(name, laboratorios, theme)}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Paper className={classes.root}>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor="select-multiple-chip">{label}</InputLabel>
+        <Select
+          multiple
+          value={laboratorios}
+          onChange={handleChange}
+          input={<Input id="select-multiple-chip" />}
+          renderValue={selected => (
+            <div className={classes.chips}>
+              {selected.map(value => (
+                <Chip key={value} label={value} className={classes.chip} />
+              ))}
+            </div>
+          )}
+          MenuProps={MenuProps}
+        >
+          {options.map((option, index) => (
+            <MenuItem
+              key={index}
+              value={option.nome}
+              style={getStyles(option.nome, options, theme)}
+            >
+              {option.nome}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Paper>
   );
 }
