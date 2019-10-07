@@ -138,6 +138,15 @@ router.get('/formLog/:formId', async (req, res, next) => {
   }
 })
 
+router.get('/laboratorio', async (req, res, next) => {
+  try {
+    const laboratorio = await db.collection('laboratorio').find().sort({nome : 1}).toArray()
+    res.status(200).json(laboratorio)
+  } catch (error) { console.log(error)
+    res.status(404).send()
+  }
+})
+
 const formSave = async (obj, formConfigId) => {
   const formConfig = await db.collection('formConfig').findOne({_id: ObjectID(formConfigId)})
   const form = await db.collection('form').findOne({_id: ObjectID(formConfig.formId)})
