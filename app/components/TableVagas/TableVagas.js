@@ -76,7 +76,7 @@ export default function TableVagas(props) {
 
     setVagas({
       ...vagas,
-      [e.target.status]: value,
+      [e.target.name]: value,
     });
   };
 
