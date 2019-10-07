@@ -170,9 +170,9 @@ export default function CursoPage() {
           <div>
             {step === 3 && (
               <TableAccessibilityResources 
-              tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-              resources={accessibilityResources}
-              setResources={setAccessibilityResources}
+                tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+                resources={accessibilityResources}
+                setResources={setAccessibilityResources}
               />
             )}
           </div>

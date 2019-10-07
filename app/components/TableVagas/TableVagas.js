@@ -25,16 +25,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableVagas(props) {
   const classes = useStyles();
-  const [options, setOptions] = useState([
-    { name: 'matutino', value: 'matutino', status: false },
-    { name: 'vespetino', value: 'vespertino', status: false },
-    { name: 'noturno', value: 'noturno', status: false },
-    { name: 'integral', value: 'integral', status: false },
-  ]);
 
   const [vagas, setVagas] = useState([
     {
       turno: 'matutino',
+      status: true,
       vagasNovas: 0,
       vagasRemanecentes: 0,
       vagasProgramasEspeciais: 0,
@@ -44,6 +39,7 @@ export default function TableVagas(props) {
     },
     {
       turno: 'vespertino',
+      status: false,
       vagasNovas: 0,
       vagasRemanecentes: 0,
       vagasProgramasEspeciais: 0,
@@ -53,6 +49,7 @@ export default function TableVagas(props) {
     },
     {
       turno: 'noturno',
+      status: false,
       vagasNovas: 0,
       vagasRemanecentes: 0,
       vagasProgramasEspeciais: 0,
@@ -62,6 +59,7 @@ export default function TableVagas(props) {
     },
     {
       turno: 'integral',
+      status: false,
       vagasNovas: 0,
       vagasRemanecentes: 0,
       vagasProgramasEspeciais: 0,
@@ -74,8 +72,10 @@ export default function TableVagas(props) {
   const updateField = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setOptions({
-      ...options,
+      console.log(e.target.name)
+
+    setVagas({
+      ...vagas,
       [e.target.name]: value,
     });
   };
@@ -97,13 +97,14 @@ export default function TableVagas(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {options.map(option => (
+          {vagas.map(option => (
             <TableRow>
               <TableCell>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      name={option.name}
+                      checked={option.status}
+                      name={option.turno}
                       value={option.value}
                       onChange={updateField}
                     />
