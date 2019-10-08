@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table as TableMaterial } from '@material-ui/core';
-import TextField from '../TextField';
+import TextField from '@material-ui/core/TextField';
 import {
   Checkbox,
   FormControlLabel,
@@ -25,59 +25,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableVagas(props) {
   const classes = useStyles();
-  let [vagas, setVagas] = useState([
-    {
-      turno: 'matutino',
-      status: true,
-      vagasNovas: 0,
-      vagasRemanecentes: 0,
-      vagasProgramasEspeciais: 0,
-      inscritosVagasNovas: 0,
-      inscritosVagasRemanecentes: 0,
-      inscritosVagasProgramasEspeciais: 0,
-    },
-    {
-      turno: 'vespertino',
-      status: false,
-      vagasNovas: 0,
-      vagasRemanecentes: 0,
-      vagasProgramasEspeciais: 0,
-      inscritosVagasNovas: 0,
-      inscritosVagasRemanecentes: 0,
-      inscritosVagasProgramasEspeciais: 0,
-    },
-    {
-      turno: 'noturno',
-      status: false,
-      vagasNovas: 0,
-      vagasRemanecentes: 0,
-      vagasProgramasEspeciais: 0,
-      inscritosVagasNovas: 0,
-      inscritosVagasRemanecentes: 0,
-      inscritosVagasProgramasEspeciais: 0,
-    },
-    {
-      turno: 'integral',
-      status: false,
-      vagasNovas: 0,
-      vagasRemanecentes: 0,
-      vagasProgramasEspeciais: 0,
-      inscritosVagasNovas: 0,
-      inscritosVagasRemanecentes: 0,
-      inscritosVagasProgramasEspeciais: 0,
-    },
-  ]);
-
-  const updateField = e => {
-    const value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    let turno = {...vagas.find(option => option.turno === e.target.name)};
-    turno[e.target.id] = value;
-    turno[e.target.vagasNovas] = 10;
-    console.log(turno);
-    setVagas({...vagas, turno});
-    console.log(...vagas);
-  };
+  const [
+    vagas,
+    handleChangeMatutino,
+    handleChangeVespertino,
+    handleChangeNoturno,
+    handleChangeIntegral,
+  ] = props;
 
   return (
     <Paper className={classes.root}>
@@ -96,120 +50,313 @@ export default function TableVagas(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {vagas.map(option => (
-            <TableRow>
-              <TableCell key={option.turno}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={option.status}
-                      name={option.turno}
-                      value={option.value}
-                      onChange={updateField}
-                    />
-                  }
-                  label={option.name}
-                  style={{ width: 120 }}
-                />
-              </TableCell>
-              <TableCell
-                align="right"
-                size="small"
-                key={option.turno + 'vagasNovas'}
-              >
-                <TextField
-                  disabled={!option.status}
-                  name={option.turno}
-                  id="vagasNovas"
-                  value={option.vagasNovas}
-                  type="number"
-                  margin="normal"
-                  variant="outlined"
-                  handleChange={updateField}
-                />
-              </TableCell>
-              <TableCell
-                align="right"
-                size="small"
-                key={option.turno + 'vagasRemanecentes'}
-              >
-                <TextField
-                  disabled={!option.status}
-                  name={option.turno}
-                  id="vagasRemanecentes"
-                  value={option.vagasRemanecentes}
-                  type="number"
-                  margin="normal"
-                  variant="outlined"
-                  handleChange={updateField}
-                />
-              </TableCell>
-              <TableCell
-                align="right"
-                size="small"
-                key={option.turno + 'vagasProgramasEspeciais'}
-              >
-                <TextField
-                  disabled={!option.status}
-                  name={option.turno}
-                  id="vagasProgramasEspeciais"
-                  value={option.vagasProgramasEspeciais}
-                  type="number"
-                  margin="normal"
-                  variant="outlined"
-                  handleChange={updateField}
-                />
-              </TableCell>
-              <TableCell
-                align="right"
-                size="small"
-                key={option.turno + 'inscritosVagasNovas'}
-              >
-                <TextField
-                  disabled={!option.status}
-                  name={option.turno}
-                  id="inscritosVagasNovas"
-                  value={option.inscritosVagasNovas}
-                  type="number"
-                  margin="normal"
-                  variant="outlined"
-                  handleChange={updateField}
-                />
-              </TableCell>
-              <TableCell
-                align="right"
-                size="small"
-                key={option.turno + 'inscritosVagasRemanecentes'}
-              >
-                <TextField
-                  disabled={!option.status}
-                  name={option.turno}
-                  id="inscritosVagasRemanecentes"
-                  value={option.inscritosVagasRemanecentes}
-                  type="number"
-                  margin="normal"
-                  variant="outlined"
-                  handleChange={updateField}
-                />
-              </TableCell>
-              <TableCell
-                align="right"
-                size="small"
-                key={option.turno + 'inscritosVagasProgramasEspeciais'}
-              >
-                <TextField
-                  disabled={!option.status}
-                  name={option.turno}
-                  id="inscritosVagasProgramasEspeciais"
-                  value={option.inscritosVagasProgramasEspeciais}
-                  type="number"
-                  margin="normal"
-                  variant="outlined"
-                  handleChange={updateField}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableCell>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={vagas.matutino.status}
+                    name="status"
+                    value={vagas.matutino.value}
+                    onChange={handleChangeMatutino}
+                  />
+                }
+                label="Matutino"
+                style={{ width: 120 }}
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
+                name="vagasNovas"
+                value={vagas.matutino.vagasNovas}
+                onChange={handleChangeMatutino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
+                name="vagasRemanecentes"
+                value={vagas.matutino.vagasRemanecentes}
+                onChange={handleChangeMatutino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
+                name="vagasProgramasEspeciais"
+                value={vagas.matutino.vagasProgramasEspeciais}
+                onChange={handleChangeMatutino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
+                name="inscritosVagasNovas"
+                value={vagas.matutino.inscritosVagasNovas}
+                onChange={handleChangeMatutino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
+                name="inscritosVagasRemanecentes"
+                value={vagas.matutino.inscritosVagasRemanecentes}
+                onChange={handleChangeMatutino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
+                name="inscritosVagasProgramasEspeciais"
+                value={vagas.matutino.inscritosVagasProgramasEspeciais}
+                onChange={handleChangeMatutino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={vagas.vespertino.status}
+                    name="status"
+                    value={vagas.vespertino.value}
+                    onChange={handleChangeVespertino}
+                  />
+                }
+                label="Vespertino"
+                style={{ width: 120 }}
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
+                name="vagasNovas"
+                value={vagas.vespertino.vagasNovas}
+                onChange={handleChangeVespertino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
+                name="vagasRemanecentes"
+                value={vagas.vespertino.vagasRemanecentes}
+                onChange={handleChangeVespertino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
+                name="vagasProgramasEspeciais"
+                value={vagas.vespertino.vagasProgramasEspeciais}
+                onChange={handleChangeVespertino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
+                name="inscritosVagasNovas"
+                value={vagas.vespertino.inscritosVagasNovas}
+                onChange={handleChangeVespertino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
+                name="inscritosVagasRemanecentes"
+                value={vagas.vespertino.inscritosVagasRemanecentes}
+                onChange={handleChangeVespertino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
+                name="inscritosVagasProgramasEspeciais"
+                value={vagas.vespertino.inscritosVagasProgramasEspeciais}
+                onChange={handleChangeVespertino}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={vagas.noturno.status}
+                    name="status"
+                    value={vagas.noturno.value}
+                    onChange={handleChangeNoturno}
+                  />
+                }
+                label="Noturno"
+                style={{ width: 120 }}
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
+                name="vagasNovas"
+                value={vagas.noturno.vagasNovas}
+                onChange={handleChangeNoturno}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
+                name="vagasRemanecentes"
+                value={vagas.noturno.vagasRemanecentes}
+                onChange={handleChangeNoturno}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
+                name="vagasProgramasEspeciais"
+                value={vagas.noturno.vagasProgramasEspeciais}
+                onChange={handleChangeNoturno}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
+                name="inscritosVagasNovas"
+                value={vagas.noturno.inscritosVagasNovas}
+                onChange={handleChangeNoturno}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
+                name="inscritosVagasRemanecentes"
+                value={vagas.noturno.inscritosVagasRemanecentes}
+                onChange={handleChangeNoturno}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
+                name="inscritosVagasProgramasEspeciais"
+                value={vagas.noturno.inscritosVagasProgramasEspeciais}
+                onChange={handleChangeNoturno}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={vagas.integral.status}
+                    name="status"
+                    value={vagas.integral.value}
+                    onChange={handleChangeIntegral}
+                  />
+                }
+                label="Integral"
+                style={{ width: 120 }}
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
+                name="vagasNovas"
+                value={vagas.integral.vagasNovas}
+                onChange={handleChangeIntegral}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
+                name="vagasRemanecentes"
+                value={vagas.integral.vagasRemanecentes}
+                onChange={handleChangeIntegral}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
+                name="vagasProgramasEspeciais"
+                value={vagas.integral.vagasProgramasEspeciais}
+                onChange={handleChangeIntegral}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
+                name="inscritosVagasNovas"
+                value={vagas.integral.inscritosVagasNovas}
+                onChange={handleChangeIntegral}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
+                name="inscritosVagasRemanecentes"
+                value={vagas.integral.inscritosVagasRemanecentes}
+                onChange={handleChangeIntegral}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
+                name="inscritosVagasProgramasEspeciais"
+                value={vagas.integral.inscritosVagasProgramasEspeciais}
+                onChange={handleChangeIntegral}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+          </TableRow>
         </TableBody>
       </TableMaterial>
     </Paper>
