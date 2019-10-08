@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableVagas(props) {
   const classes = useStyles();
-  const [vagas, setVagas] = useState([
+  let [vagas, setVagas] = useState([
     {
       turno: 'matutino',
       status: true,
@@ -73,8 +73,10 @@ export default function TableVagas(props) {
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     let turno = {...vagas.find(option => option.turno === e.target.name)};
     turno[e.target.id] = value;
+    turno[e.target.vagasNovas] = 10;
     console.log(turno);
-    // setVagas({turno});
+    setVagas({...vagas, turno});
+    console.log(...vagas);
   };
 
   return (
