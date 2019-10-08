@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableVagas(props) {
   const classes = useStyles();
-
   const [vagas, setVagas] = useState([
     {
       turno: 'matutino',
@@ -72,12 +71,10 @@ export default function TableVagas(props) {
   const updateField = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-      console.log(e.target.name)
-
-    setVagas({
-      ...vagas,
-      [e.target.name]: value,
-    });
+    let turno = {...vagas.find(option => option.turno === e.target.name)};
+    turno[e.target.id] = value;
+    console.log(turno);
+    // setVagas({turno});
   };
 
   return (
@@ -113,68 +110,100 @@ export default function TableVagas(props) {
                   style={{ width: 120 }}
                 />
               </TableCell>
-              <TableCell align="right" size="small" key={option.turno + "vagasNovas"}>
+              <TableCell
+                align="right"
+                size="small"
+                key={option.turno + 'vagasNovas'}
+              >
                 <TextField
                   disabled={!option.status}
-                  name="a"
-                  id="outlined-number"
+                  name={option.turno}
+                  id="vagasNovas"
                   value={option.vagasNovas}
                   type="number"
                   margin="normal"
                   variant="outlined"
-                  onChange={updateField}
+                  handleChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small" key={option.turno + "vagasRemanecentes"}>
+              <TableCell
+                align="right"
+                size="small"
+                key={option.turno + 'vagasRemanecentes'}
+              >
                 <TextField
                   disabled={!option.status}
-                  name="b"
-                  id="outlined-number"
+                  name={option.turno}
+                  id="vagasRemanecentes"
                   value={option.vagasRemanecentes}
                   type="number"
                   margin="normal"
                   variant="outlined"
-                  onChange={updateField}
+                  handleChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small" key={option.turno + "vagasProgramasEspeciais"}>
+              <TableCell
+                align="right"
+                size="small"
+                key={option.turno + 'vagasProgramasEspeciais'}
+              >
                 <TextField
                   disabled={!option.status}
-                  id="outlined-number"
+                  name={option.turno}
+                  id="vagasProgramasEspeciais"
                   value={option.vagasProgramasEspeciais}
                   type="number"
                   margin="normal"
                   variant="outlined"
+                  handleChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small" key={option.turno + "inscritosVagasNovas"}>
+              <TableCell
+                align="right"
+                size="small"
+                key={option.turno + 'inscritosVagasNovas'}
+              >
                 <TextField
                   disabled={!option.status}
-                  id="outlined-number"
+                  name={option.turno}
+                  id="inscritosVagasNovas"
                   value={option.inscritosVagasNovas}
                   type="number"
                   margin="normal"
                   variant="outlined"
+                  handleChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small" key={option.turno + "inscritosVagasRemanecentes"}>
+              <TableCell
+                align="right"
+                size="small"
+                key={option.turno + 'inscritosVagasRemanecentes'}
+              >
                 <TextField
                   disabled={!option.status}
-                  id="outlined-number"
+                  name={option.turno}
+                  id="inscritosVagasRemanecentes"
                   value={option.inscritosVagasRemanecentes}
                   type="number"
                   margin="normal"
                   variant="outlined"
+                  handleChange={updateField}
                 />
               </TableCell>
-              <TableCell align="right" size="small" key={option.turno + "inscritosVagasProgramasEspeciais"}>
+              <TableCell
+                align="right"
+                size="small"
+                key={option.turno + 'inscritosVagasProgramasEspeciais'}
+              >
                 <TextField
                   disabled={!option.status}
-                  id="outlined-number"
+                  name={option.turno}
+                  id="inscritosVagasProgramasEspeciais"
                   value={option.inscritosVagasProgramasEspeciais}
                   type="number"
                   margin="normal"
                   variant="outlined"
+                  handleChange={updateField}
                 />
               </TableCell>
             </TableRow>

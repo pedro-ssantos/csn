@@ -8,7 +8,7 @@ export default function TextField(props) {
       value={props.value}
       onChange={props.handleChange}
       name={props.name}
-      id="outlined-name"
+      id={props.id}
       label={props.label}
       margin="normal"
       variant="outlined"
