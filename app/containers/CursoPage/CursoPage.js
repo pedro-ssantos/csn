@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
-import {
-  Button, 
-  Fade
-} from '@material-ui/core';
+import { Button, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
@@ -49,6 +46,45 @@ const accessibilityResourcesDefault = {
   materialDigitalAcessivel: false,
 };
 
+const vagasFormDefault = {
+  matutino: {
+    status: true,
+    vagasNovas: '1',
+    vagasRemanecentes: '2',
+    vagasProgramasEspeciais: '3',
+    inscritosVagasNovas: '4',
+    inscritosVagasRemanecentes: '5',
+    inscritosVagasProgramasEspeciais: '6',
+  },
+  vespertino: {
+    status: false,
+    vagasNovas: '22',
+    vagasRemanecentes: '23',
+    vagasProgramasEspeciais: '24',
+    inscritosVagasNovas: '25',
+    inscritosVagasRemanecentes: '26',
+    inscritosVagasProgramasEspeciais: '27',
+  },
+  noturno: {
+    status: false,
+    vagasNovas: 0,
+    vagasRemanecentes: 0,
+    vagasProgramasEspeciais: 0,
+    inscritosVagasNovas: 0,
+    inscritosVagasRemanecentes: 0,
+    inscritosVagasProgramasEspeciais: 0,
+  },
+  integral: {
+    status: false,
+    vagasNovas: 0,
+    vagasRemanecentes: 0,
+    vagasProgramasEspeciais: 0,
+    inscritosVagasNovas: 0,
+    inscritosVagasRemanecentes: 0,
+    inscritosVagasProgramasEspeciais: 0,
+  },
+};
+
 const useStyles = makeStyles({
   buttonsSteps: {
     padding: '10px 0 10px',
@@ -61,8 +97,11 @@ const useStyles = makeStyles({
 export default function CursoPage() {
   const classes = useStyles();
   const [form, setFormValues] = useState(formDefault);
-  const [accessibilityResources, setAccessibilityResources] = useState(accessibilityResourcesDefault);
+  const [accessibilityResources, setAccessibilityResources] = useState(
+    accessibilityResourcesDefault,
+  );
   const [laboratorios, setLaboratorios] = React.useState([]);
+  const [vagas, setVagas] = React.useState(vagasFormDefault);
   const [checked, setChecked] = React.useState(false);
   const [step, setStep] = useState(1);
   const stepMax = 4;
@@ -70,34 +109,25 @@ export default function CursoPage() {
   const updateField = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormValues({
-      ...form,
-      [e.target.name]: value,
-    });
   };
 
   const save = async () => {
-    console.log('form', form)
     try {
       const formConfigId = window.location.pathname.split('/')[2];
-      const res = await apiService.request(
-        'put',
-        'form/'+formConfigId,
-        {
-          data: form
-        }
-      );
+      const res = await apiService.request('put', 'form/' + formConfigId, {
+        data: form,
+      });
     } catch (error) {
       alert('Erro ao salvar formulário');
     }
-  }
+  };
 
   const nextStep = () => {
-    setStep(step < stepMax-1 ? step+1 : stepMax);
+    setStep(step < stepMax - 1 ? step + 1 : stepMax);
   };
 
   const prevStep = () => {
-    setStep(step > 1 ? step-1 : step);
+    setStep(step > 1 ? step - 1 : step);
   };
 
   useEffect(() => {
@@ -133,6 +163,58 @@ export default function CursoPage() {
     getForm();
   }, []);
 
+  const handleChangeMatutino = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setVagas(prevState => ({
+      ...prevState,
+      matutino: {
+        ...vagas.matutino,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleChangeVespertino = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setVagas(prevState => ({
+      ...prevState,
+      vespertino: {
+        ...vagas.vespertino,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleChangeNoturno = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setVagas(prevState => ({
+      ...prevState,
+      noturno: {
+        ...vagas.noturno,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleChangeIntegral = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setVagas(prevState => ({
+      ...prevState,
+      integral: {
+        ...vagas.integral,
+        [name]: value,
+      },
+    }));
+  };
+
   return (
     <div className="page">
       <Helmet>
@@ -143,9 +225,8 @@ export default function CursoPage() {
         />
       </Helmet>
       <h1>Curso</h1>
-      
-      <form autoComplete="off">
 
+      <form autoComplete="off">
         <Fade in={step === 1 ? true : false}>
           <div>
             {step === 1 && (
@@ -158,18 +239,25 @@ export default function CursoPage() {
           </div>
         </Fade>
 
-        <Fade in={step === 2 ? true : false} >
+        <Fade in={step === 2 ? true : false}>
           <div>
             {step === 2 && (
-              <TableVagas form={form} handleChange={updateField} />
+              <TableVagas
+                vagas={vagas}
+                setVagas={setVagas}
+                handleChangeMatutino={handleChangeMatutino}
+                handleChangeVespertino={handleChangeVespertino}
+                handleChangeNoturno={handleChangeNoturno}
+                handleChangeIntegral={handleChangeIntegral}
+              />
             )}
           </div>
         </Fade>
 
-        <Fade in={step === 3 ? true : false} >
+        <Fade in={step === 3 ? true : false}>
           <div>
             {step === 3 && (
-              <TableAccessibilityResources 
+              <TableAccessibilityResources
                 tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
                 resources={accessibilityResources}
                 setResources={setAccessibilityResources}
@@ -178,7 +266,7 @@ export default function CursoPage() {
           </div>
         </Fade>
 
-        <Fade in={step === 4 ? true : false} >
+        <Fade in={step === 4 ? true : false}>
           <div>
             {step === 4 && (
               <ChipSelect
@@ -201,21 +289,35 @@ export default function CursoPage() {
             )}
           </div>
         </Fade>
-
       </form>
 
       <div className={classes.buttonsSteps}>
-        <Button variant="contained" onClick={prevStep} disabled={step<=1} className={classes.buttonStep} >
+        <Button
+          variant="contained"
+          onClick={prevStep}
+          disabled={step <= 1}
+          className={classes.buttonStep}
+        >
           Voltar
         </Button>
-        <Button variant="contained" onClick={nextStep} disabled={step==stepMax} className={classes.buttonStep}>
+        <Button
+          variant="contained"
+          onClick={nextStep}
+          disabled={step == stepMax}
+          className={classes.buttonStep}
+        >
           Próximo
         </Button>
-        <Button variant="contained" color="primary" onClick={save} disabled={step!=stepMax} className={classes.buttonStep}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={save}
+          disabled={step != stepMax}
+          className={classes.buttonStep}
+        >
           Salvar
         </Button>
       </div>
-
     </div>
   );
 }
