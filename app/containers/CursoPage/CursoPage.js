@@ -32,18 +32,18 @@ const formDefault = {
 };
 
 const accessibilityResourcesDefault = {
-  braile: false,
-  informaticaAcessivel: false,
-  materialTatil: false,
-  tradutorSinais: false,
-  materialSinais: false,
-  materialImpressoAcessivel: false,
-  materialAudio: false,
-  materialCaractereAmpliado: false,
-  recursoAcessComunicacao: false,
-  guiaInterprete: false,
-  insercaoDisciplinaSinais: false,
-  materialDigitalAcessivel: false,
+  braile: null,
+  informaticaAcessivel: null,
+  materialTatil: null,
+  tradutorSinais: null,
+  materialSinais: null,
+  materialImpressoAcessivel: null,
+  materialAudio: null,
+  materialCaractereAmpliado: null,
+  recursoAcessComunicacao: null,
+  guiaInterprete: null,
+  insercaoDisciplinaSinais: null,
+  materialDigitalAcessivel: null,
 };
 
 const vagasFormDefault = {

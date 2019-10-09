@@ -31,7 +31,7 @@ export default function TableVagas(props) {
     handleChangeVespertino,
     handleChangeNoturno,
     handleChangeIntegral,
-   } = props;
+  } = props;
 
   return (
     <Paper className={classes.root}>
