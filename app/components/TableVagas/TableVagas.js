@@ -25,13 +25,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableVagas(props) {
   const classes = useStyles();
-  const [
+  const {
     vagas,
     handleChangeMatutino,
     handleChangeVespertino,
     handleChangeNoturno,
     handleChangeIntegral,
-  ] = props;
+   } = props;
 
   return (
     <Paper className={classes.root}>
