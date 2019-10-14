@@ -110,7 +110,7 @@ export default function TableAccessibilityResources(props) {
                 <Radio
                   name={option.name}
                   value="sim"
-                  checked={resources[option.name]}
+                  checked={resources[option.name] === null ? '' : resources[option.name]}
                   onChange={handleChange}
                 />
               </TableCell>
@@ -118,7 +118,7 @@ export default function TableAccessibilityResources(props) {
                 <Radio
                   name={option.name}
                   value="nao"
-                  checked={!resources[option.name]}
+                  checked={resources[option.name] === null ? '' : !resources[option.name]}
                   onChange={handleChange}
                 />
               </TableCell>

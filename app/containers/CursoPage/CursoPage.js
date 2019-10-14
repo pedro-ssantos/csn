@@ -102,14 +102,18 @@ export default function CursoPage() {
   );
   const [laboratorios, setLaboratorios] = React.useState([]);
   const [vagas, setVagas] = React.useState(vagasFormDefault);
-  const [checked, setChecked] = React.useState(false);
   const [step, setStep] = useState(1);
   const stepMax = 4;
 
   const updateField = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-  };
+      setFormValues({
+        ...form,  
+        [e.target.name]: value,
+      });
+    };
+
 
   const save = async () => {
     try {
