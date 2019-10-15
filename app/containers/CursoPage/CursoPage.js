@@ -37,47 +37,45 @@ const formDefault = {
     materialDigitalAcessivel: ''
   },
 
-  vagas: {
-    matutino: {
-      status: true,
-      prazoMin: '1',
-      vagasNovas: '11',
-      vagasRemanecentes: '13',
-      vagasProgramasEspeciais: '14',
-      inscritosVagasNovas: '15',
-      inscritosVagasRemanecentes: '16',
-      inscritosVagasProgramasEspeciais: '17'
-    },
-    vespertino: {
-      status: '',
-      prazoMin: '',
-      vagasNovas: '',
-      vagasRemanecentes: '',
-      vagasProgramasEspeciais: '',
-      inscritosVagasNovas: '',
-      inscritosVagasRemanecentes: '',
-      inscritosVagasProgramasEspeciais: ''
-    },
-    noturno: {
-      status: '',
-      prazoMin: '',
-      vagasNovas: '',
-      vagasRemanecentes: '',
-      vagasProgramasEspeciais: '',
-      inscritosVagasNovas: '',
-      inscritosVagasRemanecentes: '',
-      inscritosVagasProgramasEspeciais: ''
-    },
-    integral: {
-      status: '',
-      prazoMin: '',
-      vagasNovas: '',
-      vagasRemanecentes: '',
-      vagasProgramasEspeciais: '',
-      inscritosVagasNovas: '',
-      inscritosVagasRemanecentes: '',
-      inscritosVagasProgramasEspeciais: ''
-    }
+  matutino: {
+    status: true,
+    prazoMin: '1',
+    vagasNovas: '11',
+    vagasRemanecentes: '13',
+    vagasProgramasEspeciais: '14',
+    inscritosVagasNovas: '15',
+    inscritosVagasRemanecentes: '16',
+    inscritosVagasProgramasEspeciais: '17'
+  },
+  vespertino: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
+  },
+  noturno: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
+  },
+  integral: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
   },
 
   laboratorios: {
@@ -162,70 +160,57 @@ export default function CursoPage() {
     getForm();
   }, []);
 
-  const handleChangeInfo = e => {
-    let value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    let name = e.target.name;
-
-    setFormValues(prevState => ({
-      ...prevState,
-      [e.target.name]: value,
-    }));
-  };
-
   const handleChangeMatutino = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     name = e.target.name;
-    console.log(value, name);
     setFormValues(prevState => ({
-      ...prevState.vagas.matutino,
+      ...prevState,
       matutino: {
-        ...form.vagas.matutino,
+        ...form.matutino,
         [name]: value,
       },
     }));
   };
 
-  // const handleChangeVespertino = e => {
-  //   const value =
-  //     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-  //   name = e.target.name;
-  //   setFormValues(prevState => ({
-  //     ...prevState,
-  //     vespertino: {
-  //       ...vagas.vespertino,
-  //       [name]: value,
-  //     },
-  //   }));
-  // };
+  const handleChangeVespertino = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      vespertino: {
+        ...form.vespertino,
+        [name]: value,
+      },
+    }));
+  };
 
-  // const handleChangeNoturno = e => {
-  //   const value =
-  //     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-  //   name = e.target.name;
-  //   setFormValues(prevState => ({
-  //     ...prevState,
-  //     noturno: {
-  //       ...vagas.noturno,
-  //       [name]: value,
-  //     },
-  //   }));
-  // };
+  const handleChangeNoturno = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      noturno: {
+        ...form.noturno,
+        [name]: value,
+      },
+    }));
+  };
 
-  // const handleChangeIntegral = e => {
-  //   const value =
-  //     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-  //   name = e.target.name;
-  //   setFormValues(prevState => ({
-  //     ...prevState.vagas,
-  //     integral: {
-  //       ...form.vagas.integral,
-  //       [name]: value,
-  //     },
-  //   }));
-  //   console.log(form.vagas);
-  // };
+  const handleChangeIntegral = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      integral: {
+        ...form.integral,
+        [name]: value,
+      },
+    }));
+  };
 
   return (
     <div className="page">
@@ -255,17 +240,17 @@ export default function CursoPage() {
           <div>
             {step === 2 && (
               <TableVagas
-                vagas={form.vagas}
+                vagas={form}
                 handleChangeMatutino={handleChangeMatutino}
-                // handleChangeVespertino={handleChangeVespertino}
-                // handleChangeNoturno={handleChangeNoturno}
-                // handleChangeIntegral={handleChangeIntegral}
+                handleChangeVespertino={handleChangeVespertino}
+                handleChangeNoturno={handleChangeNoturno}
+                handleChangeIntegral={handleChangeIntegral}
               />
             )}
           </div>
         </Fade>
 
-        {/* <Fade in={step === 3 ? true : false}>
+        <Fade in={step === 3 ? true : false}>
           <div>
             {step === 3 && (
               <TableAccessibilityResources
@@ -275,7 +260,7 @@ export default function CursoPage() {
               />
             )}
           </div>
-        </Fade> */}
+        </Fade>
 
         {/* <Fade in={step === 4 ? true : false}>
           <div>
