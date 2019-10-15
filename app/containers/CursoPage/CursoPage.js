@@ -10,8 +10,8 @@ import apiService from './../../services/apiService';
 import FormCursoDetails from './FormCursoDetails';
 
 const formDefault = {
-  codigoeMec: '',
   nome: '',
+  codigoeMec: '',
   nivelAcademico: '',
   grauAcademico: '',
   atributoIngresso: '',
@@ -20,69 +20,70 @@ const formDefault = {
   situacaoFuncionamento: '',
   tipoOferta: '',
   teveAlunoVinculado: '',
-  turno: '',
-  prazoMin: '',
-  vagasNovas: '',
-  vagasRemanescentes: '',
-  vagasOferecidasProgEspec: '',
-  inscVagasNovas: '',
-  inscVagasRemanescententes: '',
-  inscVagasOferecidasProgEspec: '',
-  turnoExtra: '',
-};
 
-const accessibilityResourcesDefault = {
-  braile: null,
-  informaticaAcessivel: null,
-  materialTatil: null,
-  tradutorSinais: null,
-  materialSinais: null,
-  materialImpressoAcessivel: null,
-  materialAudio: null,
-  materialCaractereAmpliado: null,
-  recursoAcessComunicacao: null,
-  guiaInterprete: null,
-  insercaoDisciplinaSinais: null,
-  materialDigitalAcessivel: null,
-};
+  RecursosAcessibilidade: {
+    possuiRecursosAcessibilidade: '',
+    braile: '',
+    informaticaAcessivel: '',
+    materialTatil: '',
+    tradutorSinais: '',
+    materialSinais: '',
+    materialImpressoAcessivel: '',
+    materialAudio: '',
+    materialCaractereAmpliado: '',
+    recursoAcessComunicacao: '',
+    guiaInterprete: '',
+    insercaoDisciplinaSinais: '',
+    materialDigitalAcessivel: ''
+  },
 
-const vagasFormDefault = {
-  matutino: {
-    status: false,
-    vagasNovas: '',
-    vagasRemanecentes: '',
-    vagasProgramasEspeciais: '',
-    inscritosVagasNovas: '',
-    inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: '',
+  vagas: {
+    matutino: {
+      status: true,
+      prazoMin: '1',
+      vagasNovas: '11',
+      vagasRemanecentes: '13',
+      vagasProgramasEspeciais: '14',
+      inscritosVagasNovas: '15',
+      inscritosVagasRemanecentes: '16',
+      inscritosVagasProgramasEspeciais: '17'
+    },
+    vespertino: {
+      status: '',
+      prazoMin: '',
+      vagasNovas: '',
+      vagasRemanecentes: '',
+      vagasProgramasEspeciais: '',
+      inscritosVagasNovas: '',
+      inscritosVagasRemanecentes: '',
+      inscritosVagasProgramasEspeciais: ''
+    },
+    noturno: {
+      status: '',
+      prazoMin: '',
+      vagasNovas: '',
+      vagasRemanecentes: '',
+      vagasProgramasEspeciais: '',
+      inscritosVagasNovas: '',
+      inscritosVagasRemanecentes: '',
+      inscritosVagasProgramasEspeciais: ''
+    },
+    integral: {
+      status: '',
+      prazoMin: '',
+      vagasNovas: '',
+      vagasRemanecentes: '',
+      vagasProgramasEspeciais: '',
+      inscritosVagasNovas: '',
+      inscritosVagasRemanecentes: '',
+      inscritosVagasProgramasEspeciais: ''
+    }
   },
-  vespertino: {
-    status: false,
-    vagasNovas: '',
-    vagasRemanecentes: '',
-    vagasProgramasEspeciais: '',
-    inscritosVagasNovas: '',
-    inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: '',
-  },
-  noturno: {
-    status: false,
-    vagasNovas: '',
-    vagasRemanecentes: '',
-    vagasProgramasEspeciais: '',
-    inscritosVagasNovas: '',
-    inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: '',
-  },
-  integral: {
-    status: false,
-    vagasNovas: '',
-    vagasRemanecentes: '',
-    vagasProgramasEspeciais: '',
-    inscritosVagasNovas: '',
-    inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: '',
-  },
+
+  laboratorios: {
+      possuiLaboratorios:'',
+      laboratorios: []
+  }
 };
 
 const useStyles = makeStyles({
@@ -97,11 +98,6 @@ const useStyles = makeStyles({
 export default function CursoPage() {
   const classes = useStyles();
   const [form, setFormValues] = useState(formDefault);
-  const [accessibilityResources, setAccessibilityResources] = useState(
-    accessibilityResourcesDefault,
-  );
-  const [laboratorios, setLaboratorios] = React.useState([]);
-  const [vagas, setVagas] = React.useState(vagasFormDefault);
   const [step, setStep] = useState(1);
   const stepMax = 4;
 
@@ -113,7 +109,6 @@ export default function CursoPage() {
         [e.target.name]: value,
       });
     };
-
 
   const save = async () => {
     try {
@@ -167,57 +162,70 @@ export default function CursoPage() {
     getForm();
   }, []);
 
+  const handleChangeInfo = e => {
+    let value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    let name = e.target.name;
+
+    setFormValues(prevState => ({
+      ...prevState,
+      [e.target.name]: value,
+    }));
+  };
+
   const handleChangeMatutino = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     name = e.target.name;
-    setVagas(prevState => ({
-      ...prevState,
+    console.log(value, name);
+    setFormValues(prevState => ({
+      ...prevState.vagas.matutino,
       matutino: {
-        ...vagas.matutino,
+        ...form.vagas.matutino,
         [name]: value,
       },
     }));
   };
 
-  const handleChangeVespertino = e => {
-    const value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    name = e.target.name;
-    setVagas(prevState => ({
-      ...prevState,
-      vespertino: {
-        ...vagas.vespertino,
-        [name]: value,
-      },
-    }));
-  };
+  // const handleChangeVespertino = e => {
+  //   const value =
+  //     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  //   name = e.target.name;
+  //   setFormValues(prevState => ({
+  //     ...prevState,
+  //     vespertino: {
+  //       ...vagas.vespertino,
+  //       [name]: value,
+  //     },
+  //   }));
+  // };
 
-  const handleChangeNoturno = e => {
-    const value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    name = e.target.name;
-    setVagas(prevState => ({
-      ...prevState,
-      noturno: {
-        ...vagas.noturno,
-        [name]: value,
-      },
-    }));
-  };
+  // const handleChangeNoturno = e => {
+  //   const value =
+  //     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  //   name = e.target.name;
+  //   setFormValues(prevState => ({
+  //     ...prevState,
+  //     noturno: {
+  //       ...vagas.noturno,
+  //       [name]: value,
+  //     },
+  //   }));
+  // };
 
-  const handleChangeIntegral = e => {
-    const value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    name = e.target.name;
-    setVagas(prevState => ({
-      ...prevState,
-      integral: {
-        ...vagas.integral,
-        [name]: value,
-      },
-    }));
-  };
+  // const handleChangeIntegral = e => {
+  //   const value =
+  //     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  //   name = e.target.name;
+  //   setFormValues(prevState => ({
+  //     ...prevState.vagas,
+  //     integral: {
+  //       ...form.vagas.integral,
+  //       [name]: value,
+  //     },
+  //   }));
+  //   console.log(form.vagas);
+  // };
 
   return (
     <div className="page">
@@ -247,18 +255,17 @@ export default function CursoPage() {
           <div>
             {step === 2 && (
               <TableVagas
-                vagas={vagas}
-                setVagas={setVagas}
+                vagas={form.vagas}
                 handleChangeMatutino={handleChangeMatutino}
-                handleChangeVespertino={handleChangeVespertino}
-                handleChangeNoturno={handleChangeNoturno}
-                handleChangeIntegral={handleChangeIntegral}
+                // handleChangeVespertino={handleChangeVespertino}
+                // handleChangeNoturno={handleChangeNoturno}
+                // handleChangeIntegral={handleChangeIntegral}
               />
             )}
           </div>
         </Fade>
 
-        <Fade in={step === 3 ? true : false}>
+        {/* <Fade in={step === 3 ? true : false}>
           <div>
             {step === 3 && (
               <TableAccessibilityResources
@@ -268,9 +275,9 @@ export default function CursoPage() {
               />
             )}
           </div>
-        </Fade>
+        </Fade> */}
 
-        <Fade in={step === 4 ? true : false}>
+        {/* <Fade in={step === 4 ? true : false}>
           <div>
             {step === 4 && (
               <ChipSelect
@@ -292,7 +299,7 @@ export default function CursoPage() {
               />
             )}
           </div>
-        </Fade>
+        </Fade> */}
       </form>
 
       <div className={classes.buttonsSteps}>
