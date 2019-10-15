@@ -57,12 +57,9 @@ export default function ChipSelect(props) {
   const classes = useStyles();
   const theme = useTheme();
   const { label } = props;
-  const { laboratorios, setLaboratorios } = props;
+  const { laboratorios } = props;
   const [options, setOptions] = useState([]);
-
-  const handleChange = event => {
-    setLaboratorios(event.target.value);
-  };
+  const {handleChange} = props;
 
   useEffect(() => {
     async function getForm() {

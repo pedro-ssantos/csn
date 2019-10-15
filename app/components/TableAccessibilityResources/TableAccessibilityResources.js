@@ -37,7 +37,9 @@ const AccessibilityResourcesDefault = {
 export default function TableAccessibilityResources(props) {
   const classes = useStyles();
   const { tableLabel } = props;
-  const {resources, setResources} = props;
+  const {resources} = props;
+  const {handleChange} = props
+
 
   const options = [
     { name: 'braile', label: 'Material em braille' },
@@ -87,10 +89,6 @@ export default function TableAccessibilityResources(props) {
     },
   ];
 
-  const handleChange = e => {
-    const value = e.target.value === 'sim' ? true : false;
-    setResources({ ...resources, [e.target.name]: value });
-  };
 
   return (
     <Paper className={classes.root}>

@@ -21,31 +21,30 @@ const formDefault = {
   tipoOferta: '',
   teveAlunoVinculado: '',
 
-  RecursosAcessibilidade: {
-    possuiRecursosAcessibilidade: '',
-    braile: '',
-    informaticaAcessivel: '',
-    materialTatil: '',
-    tradutorSinais: '',
-    materialSinais: '',
-    materialImpressoAcessivel: '',
-    materialAudio: '',
-    materialCaractereAmpliado: '',
-    recursoAcessComunicacao: '',
-    guiaInterprete: '',
-    insercaoDisciplinaSinais: '',
-    materialDigitalAcessivel: ''
+  recursosAcessibilidade: {
+    braile: null,
+    informaticaAcessivel: null,
+    materialTatil: null,
+    tradutorSinais: null,
+    materialSinais: null,
+    materialImpressoAcessivel: null,
+    materialAudio: null,
+    materialCaractereAmpliado: null,
+    recursoAcessComunicacao: null,
+    guiaInterprete: null,
+    insercaoDisciplinaSinais: null,
+    materialDigitalAcessivel: null,
   },
 
   matutino: {
-    status: true,
-    prazoMin: '1',
-    vagasNovas: '11',
-    vagasRemanecentes: '13',
-    vagasProgramasEspeciais: '14',
-    inscritosVagasNovas: '15',
-    inscritosVagasRemanecentes: '16',
-    inscritosVagasProgramasEspeciais: '17'
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: '',
   },
   vespertino: {
     status: '',
@@ -55,7 +54,7 @@ const formDefault = {
     vagasProgramasEspeciais: '',
     inscritosVagasNovas: '',
     inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: ''
+    inscritosVagasProgramasEspeciais: '',
   },
   noturno: {
     status: '',
@@ -65,7 +64,7 @@ const formDefault = {
     vagasProgramasEspeciais: '',
     inscritosVagasNovas: '',
     inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: ''
+    inscritosVagasProgramasEspeciais: '',
   },
   integral: {
     status: '',
@@ -75,13 +74,10 @@ const formDefault = {
     vagasProgramasEspeciais: '',
     inscritosVagasNovas: '',
     inscritosVagasRemanecentes: '',
-    inscritosVagasProgramasEspeciais: ''
+    inscritosVagasProgramasEspeciais: '',
   },
 
-  laboratorios: {
-      possuiLaboratorios:'',
-      laboratorios: []
-  }
+  laboratorios: [],
 };
 
 const useStyles = makeStyles({
@@ -102,11 +98,11 @@ export default function CursoPage() {
   const updateField = e => {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-      setFormValues({
-        ...form,  
-        [e.target.name]: value,
-      });
-    };
+    setFormValues({
+      ...form,
+      [e.target.name]: value,
+    });
+  };
 
   const save = async () => {
     try {
@@ -212,6 +208,30 @@ export default function CursoPage() {
     }));
   };
 
+  const handleChangeResource = e => {
+    const value = e.target.value === 'sim' ? true : false;
+    setFormValues(prevState => ({
+      ...prevState,
+      recursosAcessibilidade: {
+        ...form.recursosAcessibilidade,
+        [e.target.name]: value,
+      },
+    }));
+  };
+
+  const handleChangeLaboratorio = e => {
+    const value = e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      laboratorios: value,
+    }));
+  };
+
+  const printForm = e => {
+    console.log(form);
+  };
+
   return (
     <div className="page">
       <Helmet>
@@ -255,19 +275,19 @@ export default function CursoPage() {
             {step === 3 && (
               <TableAccessibilityResources
                 tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-                resources={accessibilityResources}
-                setResources={setAccessibilityResources}
+                resources={form.recursosAcessibilidade}
+                handleChange={handleChangeResource}
               />
             )}
           </div>
         </Fade>
 
-        {/* <Fade in={step === 4 ? true : false}>
+        <Fade in={step === 4 ? true : false}>
           <div>
             {step === 4 && (
               <ChipSelect
-                laboratorios={laboratorios}
-                setLaboratorios={setLaboratorios}
+                laboratorios={form.laboratorios}
+                handleChange={handleChangeLaboratorio}
                 label="Laboratórios"
                 options={[
                   {
@@ -284,7 +304,7 @@ export default function CursoPage() {
               />
             )}
           </div>
-        </Fade> */}
+        </Fade>
       </form>
 
       <div className={classes.buttonsSteps}>
@@ -312,6 +332,15 @@ export default function CursoPage() {
           className={classes.buttonStep}
         >
           Salvar
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={printForm}
+          className={classes.buttonStep}
+        >
+          Form
         </Button>
       </div>
     </div>
