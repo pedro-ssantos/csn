@@ -5,17 +5,7 @@ import Select from './../../components/Select';
 import { Grid, Paper } from '@material-ui/core';
 
 export default function FormCursoDetails(props) {
-  const [alignment, setAlignment] = React.useState('left');
-  const { form, updateField } = props;
-
-  const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
-
-  const next = e => {
-    e.preventDefault();
-    this.props.nextStep();
-  };
+  const { form } = props;
 
   return (
     <React.Fragment>
