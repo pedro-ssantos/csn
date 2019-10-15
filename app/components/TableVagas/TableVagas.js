@@ -25,20 +25,73 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableVagas(props) {
   const classes = useStyles();
-  const {
-    vagas,
-    handleChangeMatutino,
-    handleChangeVespertino,
-    handleChangeNoturno,
-    handleChangeIntegral,
-  } = props;
+  const [vagas, setVagas] = useState({
+      matutino: {
+        status: null,
+        prazoMin: '',
+        vagasNovas: '',
+        vagasRemanecentes: '',
+        vagasProgramasEspeciais: '',
+        inscritosVagasNovas: '',
+        inscritosVagasRemanecentes: '',
+        inscritosVagasProgramasEspeciais: ''
+      },
+      vespertino: {
+        status: null,
+        prazoMin: '',
+        vagasNovas: '',
+        vagasRemanecentes: '',
+        vagasProgramasEspeciais: '',
+        inscritosVagasNovas: '',
+        inscritosVagasRemanecentes: '',
+        inscritosVagasProgramasEspeciais: ''
+      },
+      noturno: {
+        status: null,
+        prazoMin: '',
+        vagasNovas: '',
+        vagasRemanecentes: '',
+        vagasProgramasEspeciais: '',
+        inscritosVagasNovas: '',
+        inscritosVagasRemanecentes: '',
+        inscritosVagasProgramasEspeciais: ''
+      },
+      integral: {
+        status: null,
+        prazoMin: '',
+        vagasNovas: '',
+        vagasRemanecentes: '',
+        vagasProgramasEspeciais: '',
+        inscritosVagasNovas: '',
+        inscritosVagasRemanecentes: '',
+        inscritosVagasProgramasEspeciais: ''
+      }
+  });
+  const { handleChangeVagas } = props;
+
+  useEffect(() => {
+    if (props.vagas) {
+      setVagas(props.vagas);
+    }
+  }, [props.vagas]);
+
+  const handleChange = (e, turno) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const name = e.target.name;
+    let obj = JSON.parse(JSON.stringify(vagas));
+    obj[turno][name] = value;
+    setVagas(obj);
+    handleChangeVagas(obj);
+  };
 
   return (
     <Paper className={classes.root}>
+      { vagas && vagas.matutino && (
       <TableMaterial className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell>Turno</TableCell>
+            <TableCell>Prazo mínimo integralização</TableCell>
             <TableCell>Vagas novas oferecidas </TableCell>
             <TableCell>Vagas remanescentes oferecidas</TableCell>
             <TableCell>Vagas oferecidas de programas especiais</TableCell>
@@ -58,7 +111,7 @@ export default function TableVagas(props) {
                     checked={vagas.matutino.status}
                     name="status"
                     value={vagas.matutino.value}
-                    onChange={handleChangeMatutino}
+                    onChange={(e) => {handleChange(e, 'matutino')}}
                   />
                 }
                 label="Matutino"
@@ -68,9 +121,19 @@ export default function TableVagas(props) {
             <TableCell align="right" size="small">
               <TextField
                 disabled={!vagas.matutino.status}
+                name="prazoMinimoIntregralizacao"
+                value={vagas.matutino.prazoMinimoIntregralizacao}
+                onChange={(e) => {handleChange(e, 'matutino')}}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.matutino.status}
                 name="vagasNovas"
                 value={vagas.matutino.vagasNovas}
-                onChange={handleChangeMatutino}
+                onChange={(e) => {handleChange(e, 'matutino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -80,7 +143,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.matutino.status}
                 name="vagasRemanecentes"
                 value={vagas.matutino.vagasRemanecentes}
-                onChange={handleChangeMatutino}
+                onChange={(e) => {handleChange(e, 'matutino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -90,7 +153,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.matutino.status}
                 name="vagasProgramasEspeciais"
                 value={vagas.matutino.vagasProgramasEspeciais}
-                onChange={handleChangeMatutino}
+                onChange={(e) => {handleChange(e, 'matutino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -100,7 +163,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.matutino.status}
                 name="inscritosVagasNovas"
                 value={vagas.matutino.inscritosVagasNovas}
-                onChange={handleChangeMatutino}
+                onChange={(e) => {handleChange(e, 'matutino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -110,7 +173,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.matutino.status}
                 name="inscritosVagasRemanecentes"
                 value={vagas.matutino.inscritosVagasRemanecentes}
-                onChange={handleChangeMatutino}
+                onChange={(e) => {handleChange(e, 'matutino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -120,7 +183,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.matutino.status}
                 name="inscritosVagasProgramasEspeciais"
                 value={vagas.matutino.inscritosVagasProgramasEspeciais}
-                onChange={handleChangeMatutino}
+                onChange={(e) => {handleChange(e, 'matutino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -135,7 +198,7 @@ export default function TableVagas(props) {
                     checked={vagas.vespertino.status}
                     name="status"
                     value={vagas.vespertino.value}
-                    onChange={handleChangeVespertino}
+                    onChange={(e) => {handleChange(e, 'vespertino')}}
                   />
                 }
                 label="Vespertino"
@@ -145,9 +208,19 @@ export default function TableVagas(props) {
             <TableCell align="right" size="small">
               <TextField
                 disabled={!vagas.vespertino.status}
+                name="prazoMinimoIntregralizacao"
+                value={vagas.vespertino.prazoMinimoIntregralizacao}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.vespertino.status}
                 name="vagasNovas"
                 value={vagas.vespertino.vagasNovas}
-                onChange={handleChangeVespertino}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -157,7 +230,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.vespertino.status}
                 name="vagasRemanecentes"
                 value={vagas.vespertino.vagasRemanecentes}
-                onChange={handleChangeVespertino}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -167,7 +240,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.vespertino.status}
                 name="vagasProgramasEspeciais"
                 value={vagas.vespertino.vagasProgramasEspeciais}
-                onChange={handleChangeVespertino}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -177,7 +250,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.vespertino.status}
                 name="inscritosVagasNovas"
                 value={vagas.vespertino.inscritosVagasNovas}
-                onChange={handleChangeVespertino}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -187,7 +260,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.vespertino.status}
                 name="inscritosVagasRemanecentes"
                 value={vagas.vespertino.inscritosVagasRemanecentes}
-                onChange={handleChangeVespertino}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -197,7 +270,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.vespertino.status}
                 name="inscritosVagasProgramasEspeciais"
                 value={vagas.vespertino.inscritosVagasProgramasEspeciais}
-                onChange={handleChangeVespertino}
+                onChange={(e) => {handleChange(e, 'vespertino')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -212,7 +285,7 @@ export default function TableVagas(props) {
                     checked={vagas.noturno.status}
                     name="status"
                     value={vagas.noturno.value}
-                    onChange={handleChangeNoturno}
+                    onChange={(e) => {handleChange(e, 'noturno')}}
                   />
                 }
                 label="Noturno"
@@ -222,9 +295,19 @@ export default function TableVagas(props) {
             <TableCell align="right" size="small">
               <TextField
                 disabled={!vagas.noturno.status}
+                name="prazoMinimoIntregralizacao"
+                value={vagas.noturno.prazoMinimoIntregralizacao}
+                onChange={(e) => {handleChange(e, 'noturno')}}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.noturno.status}
                 name="vagasNovas"
                 value={vagas.noturno.vagasNovas}
-                onChange={handleChangeNoturno}
+                onChange={(e) => {handleChange(e, 'noturno')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -234,7 +317,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.noturno.status}
                 name="vagasRemanecentes"
                 value={vagas.noturno.vagasRemanecentes}
-                onChange={handleChangeNoturno}
+                onChange={(e) => {handleChange(e, 'noturno')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -244,7 +327,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.noturno.status}
                 name="vagasProgramasEspeciais"
                 value={vagas.noturno.vagasProgramasEspeciais}
-                onChange={handleChangeNoturno}
+                onChange={(e) => {handleChange(e, 'noturno')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -254,7 +337,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.noturno.status}
                 name="inscritosVagasNovas"
                 value={vagas.noturno.inscritosVagasNovas}
-                onChange={handleChangeNoturno}
+                onChange={(e) => {handleChange(e, 'noturno')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -264,7 +347,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.noturno.status}
                 name="inscritosVagasRemanecentes"
                 value={vagas.noturno.inscritosVagasRemanecentes}
-                onChange={handleChangeNoturno}
+                onChange={(e) => {handleChange(e, 'noturno')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -274,7 +357,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.noturno.status}
                 name="inscritosVagasProgramasEspeciais"
                 value={vagas.noturno.inscritosVagasProgramasEspeciais}
-                onChange={handleChangeNoturno}
+                onChange={(e) => {handleChange(e, 'noturno')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -289,7 +372,7 @@ export default function TableVagas(props) {
                     checked={vagas.integral.status}
                     name="status"
                     value={vagas.integral.value}
-                    onChange={handleChangeIntegral}
+                    onChange={(e) => {handleChange(e, 'integral')}}
                   />
                 }
                 label="Integral"
@@ -299,9 +382,19 @@ export default function TableVagas(props) {
             <TableCell align="right" size="small">
               <TextField
                 disabled={!vagas.integral.status}
+                name="prazoMinimoIntregralizacao"
+                value={vagas.integral.prazoMinimoIntregralizacao}
+                onChange={(e) => {handleChange(e, 'integral')}}
+                margin="normal"
+                variant="outlined"
+              />
+            </TableCell>
+            <TableCell align="right" size="small">
+              <TextField
+                disabled={!vagas.integral.status}
                 name="vagasNovas"
                 value={vagas.integral.vagasNovas}
-                onChange={handleChangeIntegral}
+                onChange={(e) => {handleChange(e, 'integral')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -311,7 +404,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.integral.status}
                 name="vagasRemanecentes"
                 value={vagas.integral.vagasRemanecentes}
-                onChange={handleChangeIntegral}
+                onChange={(e) => {handleChange(e, 'integral')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -321,7 +414,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.integral.status}
                 name="vagasProgramasEspeciais"
                 value={vagas.integral.vagasProgramasEspeciais}
-                onChange={handleChangeIntegral}
+                onChange={(e) => {handleChange(e, 'integral')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -331,7 +424,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.integral.status}
                 name="inscritosVagasNovas"
                 value={vagas.integral.inscritosVagasNovas}
-                onChange={handleChangeIntegral}
+                onChange={(e) => {handleChange(e, 'integral')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -341,7 +434,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.integral.status}
                 name="inscritosVagasRemanecentes"
                 value={vagas.integral.inscritosVagasRemanecentes}
-                onChange={handleChangeIntegral}
+                onChange={(e) => {handleChange(e, 'integral')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -351,7 +444,7 @@ export default function TableVagas(props) {
                 disabled={!vagas.integral.status}
                 name="inscritosVagasProgramasEspeciais"
                 value={vagas.integral.inscritosVagasProgramasEspeciais}
-                onChange={handleChangeIntegral}
+                onChange={(e) => {handleChange(e, 'integral')}}
                 margin="normal"
                 variant="outlined"
               />
@@ -359,6 +452,7 @@ export default function TableVagas(props) {
           </TableRow>
         </TableBody>
       </TableMaterial>
+      )}
     </Paper>
   );
 }
