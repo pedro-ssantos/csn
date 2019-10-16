@@ -20,8 +20,10 @@ const formDefault = {
   situacaoFuncionamento: '',
   tipoOferta: '',
   teveAlunoVinculado: '',
-  vagas: {},
+  
+
   recursosAcessibilidade: {
+    possuiRecurso: null,
     braile: null,
     informaticaAcessivel: null,
     materialTatil: null,
@@ -35,6 +37,48 @@ const formDefault = {
     insercaoDisciplinaSinais: null,
     materialDigitalAcessivel: null,
   },
+
+  matutino: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: '',
+  },
+  vespertino: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: '',
+  },
+  noturno: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: '',
+  },
+  integral: {
+    status: '',
+    prazoMin: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: '',
+  },
+
   laboratorios: [],
 };
 
@@ -94,7 +138,6 @@ export default function CursoPage() {
           'form/' + resFormConfig.data.formId,
         );
         const formDb = resForm.data;
-        console.log('formDb', formDb)
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
         formDefaultNew.nome = formDb.nome;
         formDefaultNew.codigoeMec = formDb.codigoeMec;
@@ -107,9 +150,7 @@ export default function CursoPage() {
         formDefaultNew.tipoOferta = formDb.tipoOferta;
         formDefaultNew.tipoOfertaQual = formDb.tipoOfertaQual;
         formDefaultNew.teveAlunoVinculado = formDb.teveAlunoVinculado;
-        formDefaultNew.vagas = formDb.vagas;
         setFormValues(formDefaultNew);
-        console.log('formDefaultNew', formDefaultNew)
       } catch (error) {
         alert('Formulário desconhecido');
       }
@@ -117,15 +158,61 @@ export default function CursoPage() {
     getForm();
   }, []);
 
-  const handleChangeVagas = vagas => {
+  const handleChangeMatutino = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
     setFormValues(prevState => ({
       ...prevState,
-      ['vagas']: vagas,
+      matutino: {
+        ...form.matutino,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleChangeVespertino = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      vespertino: {
+        ...form.vespertino,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleChangeNoturno = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      noturno: {
+        ...form.noturno,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleChangeIntegral = e => {
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    name = e.target.name;
+    setFormValues(prevState => ({
+      ...prevState,
+      integral: {
+        ...form.integral,
+        [name]: value,
+      },
     }));
   };
 
   const handleChangeResource = e => {
-    const value = e.target.value === 'sim' ? true : false;
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormValues(prevState => ({
       ...prevState,
       recursosAcessibilidade: {
@@ -166,6 +253,7 @@ export default function CursoPage() {
               <FormCursoDetails
                 form={form}
                 handleChange={updateField}
+                handleResource={handleChangeResource}
                 nextStep={nextStep}
               />
             )}
@@ -176,8 +264,11 @@ export default function CursoPage() {
           <div>
             {step === 2 && (
               <TableVagas
-                vagas={form.vagas}
-                handleChangeVagas={handleChangeVagas}
+                vagas={form}
+                handleChangeMatutino={handleChangeMatutino}
+                handleChangeVespertino={handleChangeVespertino}
+                handleChangeNoturno={handleChangeNoturno}
+                handleChangeIntegral={handleChangeIntegral}
               />
             )}
           </div>
