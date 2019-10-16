@@ -33,39 +33,49 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const resourcesDefault = {
+  possui: null,
+  braile: null,
+  informaticaAcessivel: null,
+  materialTatil: null,
+  tradutorSinais: null,
+  materialSinais: null,
+  materialImpressoAcessivel: null,
+  materialAudio: null,
+  materialCaractereAmpliado: null,
+  recursoAcessComunicacao: null,
+  guiaInterprete: null,
+  insercaoDisciplinaSinais: null,
+  materialDigitalAcessivel: null,
+};
+
 export default function TableAccessibilityResources(props) {
   const classes = useStyles();
+  const [options, setOptions] = useState([]);
   const { 
-    options,
     handleChangeRecursosAcessibilidade,
     tableLabel,
   } = props;
 
-  const [recursosAcessibilidade, setRecursosAcessibilidade] = useState({
-    possui: null,
-    braile: null,
-    informaticaAcessivel: null,
-    materialTatil: null,
-    tradutorSinais: null,
-    materialSinais: null,
-    materialImpressoAcessivel: null,
-    materialAudio: null,
-    materialCaractereAmpliado: null,
-    recursoAcessComunicacao: null,
-    guiaInterprete: null,
-    insercaoDisciplinaSinais: null,
-    materialDigitalAcessivel: null,
-  });
+  const [recursosAcessibilidade, setRecursosAcessibilidade] = useState(resourcesDefault);
 
   const handleChange = e => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     const name = e.target.name;
     let obj = JSON.parse(JSON.stringify(recursosAcessibilidade));
     obj[name] = value;
-    console.log(obj)
     setRecursosAcessibilidade(obj);
     handleChangeRecursosAcessibilidade(obj);
   };
+
+  useEffect(() => {
+    if (props.options) {
+      setOptions(props.options);
+    }
+    if (props.recursosAcessibilidade) {
+      setRecursosAcessibilidade(props.recursosAcessibilidade);
+    }
+  }, [props.options, props.recursosAcessibilidade]);
 
   return (
     <Paper className={classes.root}>

@@ -143,6 +143,7 @@ export default function CursoPage() {
         formDefaultNew.tipoOferta = formDb.tipoOferta;
         formDefaultNew.tipoOfertaQual = formDb.tipoOfertaQual;
         formDefaultNew.teveAlunoVinculado = formDb.teveAlunoVinculado;
+        formDefaultNew.recursosAcessibilidade = formDb.recursosAcessibilidade;
         formDefaultNew.vagas = formDb.vagas;
         formDefaultNew.laboratorios = formDb.laboratorios;
         setFormValues(formDefaultNew);
