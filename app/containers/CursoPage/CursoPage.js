@@ -109,6 +109,7 @@ export default function CursoPage() {
         formDefaultNew.tipoOfertaQual = formDb.tipoOfertaQual;
         formDefaultNew.teveAlunoVinculado = formDb.teveAlunoVinculado;
         formDefaultNew.vagas = formDb.vagas;
+        formDefaultNew.laboratorios = formDb.laboratorios;
         setFormValues(formDefaultNew);
         console.log('formDefaultNew', formDefaultNew)
       } catch (error) {

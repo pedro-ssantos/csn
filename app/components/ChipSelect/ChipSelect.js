@@ -61,6 +61,14 @@ export default function ChipSelect(props) {
   const [options, setOptions] = useState([]);
   const {handleChange} = props;
 
+  const selecteds = (selected) => (
+    <div className={classes.chips}>
+      {selected.map(value => (
+        <Chip key={value} label={value} className={classes.chip} />
+      ))}
+    </div>
+  );
+
   useEffect(() => {
     async function getForm() {
       try {
@@ -83,13 +91,7 @@ export default function ChipSelect(props) {
           value={laboratorios}
           onChange={handleChange}
           input={<Input id="select-multiple-chip" />}
-          renderValue={selected => (
-            <div className={classes.chips}>
-              {selected.map(value => (
-                <Chip key={value} label={value} className={classes.chip} />
-              ))}
-            </div>
-          )}
+          renderValue={selecteds}
           MenuProps={MenuProps}
         >
           {options.map((option, index) => (
