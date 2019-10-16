@@ -21,21 +21,7 @@ const formDefault = {
   tipoOferta: '',
   teveAlunoVinculado: '',
   vagas: {},
-  recursosAcessibilidade: {
-    possuiRecurso: null,
-    braile: null,
-    informaticaAcessivel: null,
-    materialTatil: null,
-    tradutorSinais: null,
-    materialSinais: null,
-    materialImpressoAcessivel: null,
-    materialAudio: null,
-    materialCaractereAmpliado: null,
-    recursoAcessComunicacao: null,
-    guiaInterprete: null,
-    insercaoDisciplinaSinais: null,
-    materialDigitalAcessivel: null,
-  },
+  recursosAcessibilidade: {},
   laboratorios: [],
 };
 
@@ -66,6 +52,8 @@ export default function CursoPage() {
   const save = async () => {
     try {
       const formConfigId = window.location.pathname.split('/')[2];
+      console.log('Se garantir condições para pessoas com deficiencias, validar os radios')
+      console.log('Se não garantir condições para pessoas com deficiencias, limpar os radios')
       const res = await apiService.request('put', 'form/' + formConfigId, {
         data: form,
       });
@@ -125,14 +113,10 @@ export default function CursoPage() {
     }));
   };
 
-  const handleChangeResource = e => {
-    const value = e.target.value === 'sim' ? true : false;
+  const handleChangeRecursosAcessibilidade = recursos => {
     setFormValues(prevState => ({
       ...prevState,
-      recursosAcessibilidade: {
-        ...form.recursosAcessibilidade,
-        [e.target.name]: value,
-      },
+      ['recursosAcessibilidade']: recursos,
     }));
   };
 
@@ -189,8 +173,8 @@ export default function CursoPage() {
             {step === 3 && (
               <TableAccessibilityResources
                 tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-                resources={form.recursosAcessibilidade}
-                handleChange={handleChangeResource}
+                recursosAcessibilidade={form.recursosAcessibilidade}
+                handleChangeRecursosAcessibilidade={handleChangeRecursosAcessibilidade}
               />
             )}
           </div>
