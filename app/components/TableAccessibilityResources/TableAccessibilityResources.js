@@ -36,56 +36,10 @@ const useStyles = makeStyles(theme => ({
 export default function TableAccessibilityResources(props) {
   const classes = useStyles();
   const { 
+    options,
     handleChangeRecursosAcessibilidade,
     tableLabel,
   } = props;
-  const options = [
-    { name: 'braile', label: 'Material em braille' },
-    {
-      name: 'informaticaAcessivel',
-      label: 'Recursos de informática acessível',
-    },
-    {
-      name: 'materialTatil',
-      label: 'Material pedagógico tátil'
-    },
-    {
-      name: 'tradutorSinais',
-      label: 'Tradutor e intérprete de língua brasileira de sinais'
-    },
-    {
-      name: 'materialSinais',
-      label: 'Material didático em língua brasileira de sinais'
-    },
-    {
-      name: 'materialImpressoAcessivel',
-      label: 'Material didático em formato impresso acessível'
-    },
-    {
-      name: 'materialAudio',
-      label: 'Material em áudio'
-    },
-    {
-      name: 'materialCaractereAmpliado',
-      label: 'Material em formato impresso em caractere ampliado'
-    },
-    {
-      name: 'recursoAcessComunicacao',
-      label: 'Recursos de acessibilidade à comunicação'
-    },
-    {
-      name: 'guiaInterprete',
-      label: 'Guia intérprete'
-    },
-    {
-      name: 'insercaoDisciplinaSinais',
-      label: 'Inserção da disciplina de língua brasileira de sinais no curso'
-    },
-    {
-      name: 'materialDigitalAcessivel',
-      label: 'Material didático digital acessível'
-    },
-  ];
 
   const [recursosAcessibilidade, setRecursosAcessibilidade] = useState({
     possui: null,

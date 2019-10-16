@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
-import { Button, Fade } from '@material-ui/core';
+import { 
+  Button, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle,
+  Fade 
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
@@ -38,7 +46,23 @@ export default function CursoPage() {
   const classes = useStyles();
   const [form, setFormValues] = useState(formDefault);
   const [step, setStep] = useState(1);
+  const [dialogErrors, setDialogErrors] = useState([]);
+  const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
   const stepMax = 4;
+  const resourcesOptions = [
+    { name: 'braile', label: 'Material em braille' },
+    { name: 'informaticaAcessivel', label: 'Recursos de informática acessível' },
+    { name: 'materialTatil', label: 'Material pedagógico tátil' },
+    { name: 'tradutorSinais', label: 'Tradutor e intérprete de língua brasileira de sinais' },
+    { name: 'materialSinais', label: 'Material didático em língua brasileira de sinais' },
+    { name: 'materialImpressoAcessivel', label: 'Material didático em formato impresso acessível' },
+    { name: 'materialAudio', label: 'Material em áudio' },
+    { name: 'materialCaractereAmpliado', label: 'Material em formato impresso em caractere ampliado' },
+    { name: 'recursoAcessComunicacao', label: 'Recursos de acessibilidade à comunicação' },
+    { name: 'guiaInterprete', label: 'Guia intérprete' },
+    { name: 'insercaoDisciplinaSinais', label: 'Inserção da disciplina de língua brasileira de sinais no curso' },
+    { name: 'materialDigitalAcessivel', label: 'Material didático digital acessível' },
+  ];
 
   const updateField = e => {
     const value =
@@ -51,16 +75,40 @@ export default function CursoPage() {
 
   const save = async () => {
     try {
+      adjustForm(form);
       const formConfigId = window.location.pathname.split('/')[2];
-      console.log('Se garantir condições para pessoas com deficiencias, validar os radios')
-      console.log('Se não garantir condições para pessoas com deficiencias, limpar os radios')
       const res = await apiService.request('put', 'form/' + formConfigId, {
         data: form,
       });
-    } catch (error) {
-      alert('Erro ao salvar formulário');
+    } catch (errors) {
+      // console.log(errors);
+      setDialogErrors(errors);
+      setDialogErrorsOpen(true);
+      // alert('Erro ao salvar formulário');
     }
   };
+
+  const adjustForm = (obj) => {
+    let errors = [];
+
+    // Deficiencia
+    if (obj.recursosAcessibilidade.possui == 'Sim') {
+      for (const [field, value] of Object.entries(obj.recursosAcessibilidade)) {
+        if (field != 'possui' && value == null) {
+          for (let option of resourcesOptions) {
+            if (field == option.name) {
+              errors.push('Campo '+option.label+' não preenchido');
+            }
+          }
+        }
+      }
+    } else {
+      console.log('Se não garantir condições para pessoas com deficiencias, limpar os radios')
+    }
+    if (errors.length > 0) {
+      throw errors;
+    }
+  }
 
   const nextStep = () => {
     setStep(step < stepMax - 1 ? step + 1 : stepMax);
@@ -83,7 +131,6 @@ export default function CursoPage() {
           'form/' + resFormConfig.data.formId,
         );
         const formDb = resForm.data;
-        console.log('formDb', formDb)
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
         formDefaultNew.nome = formDb.nome;
         formDefaultNew.codigoeMec = formDb.codigoeMec;
@@ -99,7 +146,6 @@ export default function CursoPage() {
         formDefaultNew.vagas = formDb.vagas;
         formDefaultNew.laboratorios = formDb.laboratorios;
         setFormValues(formDefaultNew);
-        console.log('formDefaultNew', formDefaultNew)
       } catch (error) {
         alert('Formulário desconhecido');
       }
@@ -174,6 +220,7 @@ export default function CursoPage() {
             {step === 3 && (
               <TableAccessibilityResources
                 tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+                options={resourcesOptions}
                 recursosAcessibilidade={form.recursosAcessibilidade}
                 handleChangeRecursosAcessibilidade={handleChangeRecursosAcessibilidade}
               />
@@ -242,6 +289,28 @@ export default function CursoPage() {
           Form
         </Button>
       </div>
+
+      <Dialog
+        open={dialogErrorsOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth = {'md'}
+      >
+        <DialogTitle id="alert-dialog-title">Ops... encontramos os seguintes erros:</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {dialogErrors.map(error => (
+              <div>{error}</div>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogErrorsOpen(false)} color="primary" autoFocus>
+            Fechar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
   );
 }
