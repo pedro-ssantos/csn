@@ -23,56 +23,60 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const vagasDefault = {
+  matutino: {
+    status: false,
+    prazoMinimoIntregralizacao: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
+  },
+  vespertino: {
+    status: false,
+    prazoMinimoIntregralizacao: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
+  },
+  noturno: {
+    status: false,
+    prazoMinimoIntregralizacao: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
+  },
+  integral: {
+    status: false,
+    prazoMinimoIntregralizacao: '',
+    vagasNovas: '',
+    vagasRemanecentes: '',
+    vagasProgramasEspeciais: '',
+    inscritosVagasNovas: '',
+    inscritosVagasRemanecentes: '',
+    inscritosVagasProgramasEspeciais: ''
+  }
+};
+
 export default function TableVagas(props) {
   const classes = useStyles();
-  const [vagas, setVagas] = useState({
-      matutino: {
-        status: null,
-        prazoMin: '',
-        vagasNovas: '',
-        vagasRemanecentes: '',
-        vagasProgramasEspeciais: '',
-        inscritosVagasNovas: '',
-        inscritosVagasRemanecentes: '',
-        inscritosVagasProgramasEspeciais: ''
-      },
-      vespertino: {
-        status: null,
-        prazoMin: '',
-        vagasNovas: '',
-        vagasRemanecentes: '',
-        vagasProgramasEspeciais: '',
-        inscritosVagasNovas: '',
-        inscritosVagasRemanecentes: '',
-        inscritosVagasProgramasEspeciais: ''
-      },
-      noturno: {
-        status: null,
-        prazoMin: '',
-        vagasNovas: '',
-        vagasRemanecentes: '',
-        vagasProgramasEspeciais: '',
-        inscritosVagasNovas: '',
-        inscritosVagasRemanecentes: '',
-        inscritosVagasProgramasEspeciais: ''
-      },
-      integral: {
-        status: null,
-        prazoMin: '',
-        vagasNovas: '',
-        vagasRemanecentes: '',
-        vagasProgramasEspeciais: '',
-        inscritosVagasNovas: '',
-        inscritosVagasRemanecentes: '',
-        inscritosVagasProgramasEspeciais: ''
-      }
-  });
+
+  const [vagas, setVagas] = useState(vagasDefault);
   const { handleChangeVagas } = props;
 
   useEffect(() => {
     if (props.vagas) {
       setVagas(props.vagas);
     }
+
   }, [props.vagas]);
 
   const handleChange = (e, turno) => {
@@ -80,6 +84,10 @@ export default function TableVagas(props) {
     const name = e.target.name;
     let obj = JSON.parse(JSON.stringify(vagas));
     obj[turno][name] = value;
+
+    if(e.target.type === 'checkbox' && value === false){
+      obj[turno] = vagasDefault[turno];
+    }
     setVagas(obj);
     handleChangeVagas(obj);
   };
@@ -110,7 +118,7 @@ export default function TableVagas(props) {
                   <Checkbox
                     checked={vagas.matutino.status}
                     name="status"
-                    value={vagas.matutino.value}
+                    value={vagas.matutino.status}
                     onChange={(e) => {handleChange(e, 'matutino')}}
                   />
                 }
