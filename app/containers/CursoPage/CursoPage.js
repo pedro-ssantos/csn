@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
-import { 
-  Button, 
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   DialogTitle,
-  Fade 
+  Fade,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
@@ -51,17 +51,41 @@ export default function CursoPage() {
   const stepMax = 4;
   const resourcesOptions = [
     { name: 'braile', label: 'Material em braille' },
-    { name: 'informaticaAcessivel', label: 'Recursos de informática acessível' },
+    {
+      name: 'informaticaAcessivel',
+      label: 'Recursos de informática acessível',
+    },
     { name: 'materialTatil', label: 'Material pedagógico tátil' },
-    { name: 'tradutorSinais', label: 'Tradutor e intérprete de língua brasileira de sinais' },
-    { name: 'materialSinais', label: 'Material didático em língua brasileira de sinais' },
-    { name: 'materialImpressoAcessivel', label: 'Material didático em formato impresso acessível' },
+    {
+      name: 'tradutorSinais',
+      label: 'Tradutor e intérprete de língua brasileira de sinais',
+    },
+    {
+      name: 'materialSinais',
+      label: 'Material didático em língua brasileira de sinais',
+    },
+    {
+      name: 'materialImpressoAcessivel',
+      label: 'Material didático em formato impresso acessível',
+    },
     { name: 'materialAudio', label: 'Material em áudio' },
-    { name: 'materialCaractereAmpliado', label: 'Material em formato impresso em caractere ampliado' },
-    { name: 'recursoAcessComunicacao', label: 'Recursos de acessibilidade à comunicação' },
+    {
+      name: 'materialCaractereAmpliado',
+      label: 'Material em formato impresso em caractere ampliado',
+    },
+    {
+      name: 'recursoAcessComunicacao',
+      label: 'Recursos de acessibilidade à comunicação',
+    },
     { name: 'guiaInterprete', label: 'Guia intérprete' },
-    { name: 'insercaoDisciplinaSinais', label: 'Inserção da disciplina de língua brasileira de sinais no curso' },
-    { name: 'materialDigitalAcessivel', label: 'Material didático digital acessível' },
+    {
+      name: 'insercaoDisciplinaSinais',
+      label: 'Inserção da disciplina de língua brasileira de sinais no curso',
+    },
+    {
+      name: 'materialDigitalAcessivel',
+      label: 'Material didático digital acessível',
+    },
   ];
 
   const updateField = e => {
@@ -88,8 +112,26 @@ export default function CursoPage() {
     }
   };
 
-  const adjustForm = (obj) => {
+  const adjustForm = (obj = form) => {
     let errors = [];
+
+    //Vagas por Turnos
+    obj = form;
+    console.log(obj.vagas);
+    if (obj.vagas) {
+      for (let [turno, campos] of Object.entries(obj.vagas)) {
+        if (campos.status === true) {
+          for (let [campo, value] of Object.entries(campos)) {
+            if (value == '') {
+              //console.log('Campo ' + campo + ' Turno: ' + turno + ' não preeenchido');
+              errors.push(
+                'Campo ' + campo + ' ,Turno: ' + turno + ' não preenchido!',
+              );
+            }
+          }
+        }
+      }
+    }
 
     // Deficiencia
     if (obj.recursosAcessibilidade.possui == 'Sim') {
@@ -97,18 +139,20 @@ export default function CursoPage() {
         if (field != 'possui' && value == null) {
           for (let option of resourcesOptions) {
             if (field == option.name) {
-              errors.push('Campo '+option.label+' não preenchido');
+              errors.push('Campo ' + option.label + ' não preenchido');
             }
           }
         }
       }
     } else {
-      console.log('Se não garantir condições para pessoas com deficiencias, limpar os radios')
+      console.log(
+        'Se não garantir condições para pessoas com deficiencias, limpar os radios',
+      );
     }
     if (errors.length > 0) {
       throw errors;
     }
-  }
+  };
 
   const nextStep = () => {
     setStep(step < stepMax - 1 ? step + 1 : stepMax);
@@ -177,10 +221,6 @@ export default function CursoPage() {
     }));
   };
 
-  const printForm = e => {
-    console.log(form);
-  };
-
   return (
     <div className="page">
       <Helmet>
@@ -223,7 +263,9 @@ export default function CursoPage() {
                 tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
                 options={resourcesOptions}
                 recursosAcessibilidade={form.recursosAcessibilidade}
-                handleChangeRecursosAcessibilidade={handleChangeRecursosAcessibilidade}
+                handleChangeRecursosAcessibilidade={
+                  handleChangeRecursosAcessibilidade
+                }
               />
             )}
           </div>
@@ -284,10 +326,10 @@ export default function CursoPage() {
         <Button
           variant="contained"
           color="primary"
-          onClick={printForm}
+          onClick={adjustForm}
           className={classes.buttonStep}
         >
-          Form
+          Test
         </Button>
       </div>
 
@@ -295,9 +337,11 @@ export default function CursoPage() {
         open={dialogErrorsOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth = {'md'}
+        maxWidth={'md'}
       >
-        <DialogTitle id="alert-dialog-title">Ops... encontramos os seguintes erros:</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Ops... encontramos os seguintes erros:
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {dialogErrors.map(error => (
@@ -306,12 +350,15 @@ export default function CursoPage() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogErrorsOpen(false)} color="primary" autoFocus>
+          <Button
+            onClick={() => setDialogErrorsOpen(false)}
+            color="primary"
+            autoFocus
+          >
             Fechar
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }
