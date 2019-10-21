@@ -3,13 +3,25 @@ import apiService from './../../services/apiService';
 import TextField from './../../components/TextField';
 import Select from './../../components/Select';
 import { Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    margin: theme.spacing(0, 10),
+  },
+  inline: {
+    display: 'inline',
+  },
+}));
 
 export default function FormCursoDetails(props) {
   const { form } = props;
+  const classes = useStyles();
+
 
   return (
     <React.Fragment>
-      <Paper>
+      <Paper className={classes.paper}>
         <h2>Informações do Curso</h2>
 
         <Grid container>
