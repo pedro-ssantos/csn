@@ -40,6 +40,7 @@ const useStyles = makeStyles({
   buttonStep: {
     marginRight: '10px',
   },
+  
 });
 
 export default function CursoPage() {
@@ -48,6 +49,7 @@ export default function CursoPage() {
   const [step, setStep] = useState(1);
   const [dialogErrors, setDialogErrors] = useState([]);
   const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
+  const [permissions, setPermissions] = useState([]);
   const stepMax = 4;
   const resourcesOptions = [
     { name: 'braile', label: 'Material em braille' },
@@ -170,10 +172,14 @@ export default function CursoPage() {
           'get',
           'formConfig/' + formConfigId,
         );
+
         const resForm = await apiService.request(
           'get',
           'form/' + resFormConfig.data.formId,
         );
+        let perm = resFormConfig.data.fields;
+        setPermissions(perm);
+      
         const formDb = resForm.data;
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
         formDefaultNew.nome = formDb.nome;
@@ -240,6 +246,7 @@ export default function CursoPage() {
                 form={form}
                 handleChange={updateField}
                 nextStep={nextStep}
+                permissions={permissions}
               />
             )}
           </div>

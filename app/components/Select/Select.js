@@ -12,9 +12,8 @@ export default function Select(props) {
       flexWrap: 'wrap',
     },
     formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      minWidth: 220,
+      margin: theme.spacing(1.5),
+      minWidth: 320,
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
@@ -30,12 +29,13 @@ export default function Select(props) {
   }, [props.options]);
 
   return (
-    <FormControl required variant="outlined" className={classes.formControl}>
+    <FormControl required variant="outlined" className={classes.formControl} >
       <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
         {props.label}
       </InputLabel>
       <SelectMaterial
         value={props.value}
+        disabled={props.permission === 'update' ? false : true}
         onChange={props.handleChange}
         labelWidth={labelWidth}
         inputProps={{
@@ -45,7 +45,7 @@ export default function Select(props) {
       >
         <MenuItem value="">
           <em>Selecione</em>
-        </MenuItem>
+        </MenuItem >
         {options.map(option => (
           <MenuItem key={option.key} value={option.key}>
             {option.label}
