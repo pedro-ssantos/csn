@@ -46,6 +46,26 @@ router.all('/*', async(req, res, next) => {
   next()
 })
 
+router.post('/admin/form/', async (req, res, next) => {
+  if (req.headers.authorization == 'kkjk4j90jrf092jmc28sl2dk98gn3v9fa9') {
+    try {
+      let form = JSON.parse(JSON.stringify(cursoModel))
+      form.nome = req.body.form.nome
+      const formAdded = await db.collection('form').insert(form,{w:1})
+      let formConfigObj = req.body.config
+      formConfigObj.responsible = "pei"
+      formConfigObj.formId = ObjectID(formAdded.ops[0]._id)
+      await db.collection('formConfig').insert(formConfigObj,{w:1})
+      res.status(200).send()
+    } catch (error) {
+      console.log(error)
+      res.status(400).send()
+    }
+  } else {
+    res.status(401).send()
+  }
+})
+
 router.get('/form', async (req, res, next) => {
   let where = {}
   if (req.query['period']) {
@@ -155,6 +175,10 @@ const formSave = async (obj, formConfigId) => {
   // console.log('formConfig', formConfig)
   // console.log('form', form)
   // console.log('obj', obj)
+
+  // getObjInfo(obj)
+
+
   for (const [field, value] of Object.entries(obj)) {
     if (field === '_id') {
       continue
@@ -193,6 +217,34 @@ const logIt = async (formId, responsible, changes) => {
   }
 }
 
+const getObjInfo = (obj) => {
+  let changes = []
+  const iter = (obj, parent = null) => {
+    for (var key in obj) {
+      if (typeof(obj[key]) == 'object') {
+        let parentNew = (parent == null) ? key : parent+'.'+key;
+        iter(obj[key], parentNew);
+      } else {
+        let objNew = {};
+        if (parent == null) {
+          objNew = {
+            key: key,
+            value: obj[key],
+          }
+        } else {
+          objNew = {
+            key: parent+'.'+key,
+            value: obj[key],
+          }
+        }
+        changes.push(objNew);
+      }
+    }
+  }
+  iter(obj);
+  return changes;
+}
+
 const hasPermission = (field, formConfig) => {
   for (const formConfigField of formConfig.fields) {
     if (formConfigField.id == field && formConfigField.permission == 'update') {
@@ -200,6 +252,95 @@ const hasPermission = (field, formConfig) => {
     }
   }
   return false;
+}
+
+const cursoModel = {
+  "codigoeMec": null,
+  "nome": null,
+  "nivelAcademico": null,
+  "grauAcademico": null,
+  "atributoIngresso": null,
+  "modalidadeEnsino": null,
+  "situacaoFuncionamento": null,
+  "alunoVinculado": null,
+  "tipoOferta": null,
+  "tipoOfertaQual": null,
+  "teveAlunoVinculado": null,
+  "vagas": {
+    "matutino": {
+      "status": false,
+      "prazoMinimoIntregralizacao": null,
+      "vagasNovas": null,
+      "vagasRemanecentes": null,
+      "vagasProgramasEspeciais": null,
+      "inscritosVagasNovas": null,
+      "inscritosVagasRemanecentes": null,
+      "inscritosVagasProgramasEspeciais": null
+    },
+    "vespertino": {
+      "status": false,
+      "prazoMinimoIntregralizacao": null,
+      "vagasNovas": null,
+      "vagasRemanecentes": null,
+      "vagasProgramasEspeciais": null,
+      "inscritosVagasNovas": null,
+      "inscritosVagasRemanecentes": null,
+      "inscritosVagasProgramasEspeciais": null
+    },
+    "noturno": {
+      "status": false,
+      "prazoMinimoIntregralizacao": null,
+      "vagasNovas": null,
+      "vagasRemanecentes": null,
+      "vagasProgramasEspeciais": null,
+      "inscritosVagasNovas": null,
+      "inscritosVagasRemanecentes": null,
+      "inscritosVagasProgramasEspeciais": null
+    },
+    "integral": {
+      "status": false,
+      "prazoMinimoIntregralizacao": null,
+      "vagasNovas": null,
+      "vagasRemanecentes": null,
+      "vagasProgramasEspeciais": null,
+      "inscritosVagasNovas": null,
+      "inscritosVagasRemanecentes": null,
+      "inscritosVagasProgramasEspeciais": null
+    }
+  },
+  "deficiencia": {
+    "possui": null,
+    "recursos": {
+      "braile": null,
+      "informaticaAcessivel": null,
+      "materialPedagogicoTatil": null,
+      "tradutorInterpreteLinguaBrasileiraDeSinais": null,
+      "materialDidaticoLinguaBrasileiraDeSinais": null,
+      "materialDidaticoEmFormatoImpressoAcessivel": null,
+      "materialEmAudio": null,
+      "materialEmFormatoImpressoEmCaratereAmpliado": null,
+      "recursosDeAcessibilidadeAComunicacao": null,
+      "guiaInterprete": null,
+      "insercaoDaDisciplinaDeLinguaBrasileira": null,
+      "materialDidaticoDigitalAcessivel": null
+    }
+  },
+  "recursosAcessibilidade": {
+    "braile": null,
+    "informaticaAcessivel": null,
+    "materialTatil": null,
+    "tradutorSinais": null,
+    "materialSinais": null,
+    "materialImpressoAcessivel": null,
+    "materialAudio": null,
+    "materialCaractereAmpliado": null,
+    "recursoAcessComunicacao": null,
+    "guiaInterprete": null,
+    "insercaoDisciplinaSinais": null,
+    "materialDigitalAcessivel": null,
+    "possui": null
+  },
+  "laboratorios": []
 }
 
 module.exports = router
