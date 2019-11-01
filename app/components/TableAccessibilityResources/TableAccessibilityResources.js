@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { 
+import {
   Box,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Paper,
   Radio,
-  RadioGroup,
   Table,
   TableBody,
   TableCell,
@@ -29,8 +25,8 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 3,
   },
   tableCellOdd: {
-    backgroundColor: '#f3f3f3'
-  }
+    backgroundColor: '#f3f3f3',
+  },
 }));
 
 const resourcesDefault = {
@@ -52,15 +48,15 @@ const resourcesDefault = {
 export default function TableAccessibilityResources(props) {
   const classes = useStyles();
   const [options, setOptions] = useState([]);
-  const { 
-    handleChangeRecursosAcessibilidade,
-    tableLabel,
-  } = props;
+  const { handleChangeRecursosAcessibilidade, tableLabel } = props;
 
-  const [recursosAcessibilidade, setRecursosAcessibilidade] = useState(resourcesDefault);
+  const [recursosAcessibilidade, setRecursosAcessibilidade] = useState(
+    resourcesDefault,
+  );
 
   const handleChange = e => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     const name = e.target.name;
     let obj = JSON.parse(JSON.stringify(recursosAcessibilidade));
     obj[name] = value;
@@ -80,7 +76,8 @@ export default function TableAccessibilityResources(props) {
   return (
     <Paper className={classes.root}>
       <Box component="span" m={2}>
-          Curso garante condições de ensino-aprendizagem para pessoas com deficiência?
+        Curso garante condições de ensino-aprendizagem para pessoas com
+        deficiência?
         <Radio
           name="possui"
           value="Sim"
@@ -96,8 +93,8 @@ export default function TableAccessibilityResources(props) {
         />
         Não
       </Box>
-      
-      { recursosAcessibilidade.possui === 'Sim' && (
+
+      {recursosAcessibilidade.possui === 'Sim' && (
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -109,12 +106,16 @@ export default function TableAccessibilityResources(props) {
           <TableBody>
             {options.map((option, index) => (
               <TableRow className={index % 2 ? '' : classes.tableCellOdd}>
-                <TableCell className={classes.tableCondensed}>{option.label}</TableCell>
+                <TableCell className={classes.tableCondensed}>
+                  {option.label}
+                </TableCell>
                 <TableCell className={classes.tableCondensed}>
                   <Radio
                     name={option.name}
                     value="Sim"
-                    checked={recursosAcessibilidade[option.name] === 'Sim' ? true : ''}
+                    checked={
+                      recursosAcessibilidade[option.name] === 'Sim' ? true : ''
+                    }
                     onChange={handleChange}
                   />
                 </TableCell>
@@ -122,7 +123,9 @@ export default function TableAccessibilityResources(props) {
                   <Radio
                     name={option.name}
                     value="Não"
-                    checked={recursosAcessibilidade[option.name] === 'Não' ? true : ''}
+                    checked={
+                      recursosAcessibilidade[option.name] === 'Não' ? true : ''
+                    }
                     onChange={handleChange}
                   />
                 </TableCell>

@@ -40,7 +40,6 @@ const useStyles = makeStyles({
   buttonStep: {
     marginRight: '10px',
   },
-  
 });
 
 export default function CursoPage() {
@@ -49,8 +48,10 @@ export default function CursoPage() {
   const [step, setStep] = useState(1);
   const [dialogErrors, setDialogErrors] = useState([]);
   const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
+  const [profile, setProfile] = useState('');
   const [permissions, setPermissions] = useState([]);
   const stepMax = 4;
+  const reNum = /^[0-9\b]+$/;
   const resourcesOptions = [
     { name: 'braile', label: 'Material em braille' },
     {
@@ -119,7 +120,6 @@ export default function CursoPage() {
 
     //Vagas por Turnos
     obj = form;
-    console.log(obj.vagas);
     if (obj.vagas) {
       for (let [turno, campos] of Object.entries(obj.vagas)) {
         if (campos.status === true) {
@@ -156,12 +156,73 @@ export default function CursoPage() {
     }
   };
 
+  /**
+   * Return de size of the step in order to get the next/previous permissioned step.
+   */
+  const stepSize = () => {
+    // Default Size.
+    let size = 1;
+
+    if (!canSee('tableVagas')) {
+      size++;
+    }
+    if (!canSee('acessibilityResources')) {
+      size++;
+    }
+
+    return size;
+  };
+
   const nextStep = () => {
-    setStep(step < stepMax - 1 ? step + 1 : stepMax);
+    switch (step) {
+      case 1:
+        if (canSee('tableVagas')) {
+          setStep(2);
+          break;
+        } else if (canSee('acessibilityResources')) {
+          setStep(3);
+          break;
+        } else {
+          setStep(4);
+          break;
+        }
+      case 2:
+        if (canSee('acessibilityResources')) {
+          setStep(3);
+          break;
+        } else {
+          setStep(4);
+          break;
+        }
+      default:
+        setStep(step < stepMax - 1 ? step + 1 : stepMax);
+    }
   };
 
   const prevStep = () => {
-    setStep(step > 1 ? step - 1 : step);
+    switch (step) {
+      case 4:
+        if (canSee('acessibilityResources')) {
+          setStep(3);
+          break;
+        } else if (canSee('tableVagas')) {
+          setStep(2);
+          break;
+        } else {
+          setStep(1);
+          break;
+        }
+      case 3:
+        if (canSee('tableVagas')) {
+          setStep(2);
+          break;
+        } else {
+          setStep(1);
+          break;
+        }
+      default:
+        setStep(step > 1 ? step - 1 : step);
+    }
   };
 
   useEffect(() => {
@@ -178,8 +239,11 @@ export default function CursoPage() {
           'form/' + resFormConfig.data.formId,
         );
         let perm = resFormConfig.data.fields;
+        let prof = resFormConfig.data.responsible;
+        console.log(perm);
+        setProfile(prof);
         setPermissions(perm);
-      
+
         const formDb = resForm.data;
         let formDefaultNew = JSON.parse(JSON.stringify(formDefault));
         formDefaultNew.nome = formDb.nome;
@@ -227,6 +291,26 @@ export default function CursoPage() {
     }));
   };
 
+  const canSee = fieldId => {
+    if (profile === 'pei' || permissions.map(arr => arr.id).includes(fieldId)) {
+      return true;
+    }
+    return false;
+  };
+
+  const canEdit = fieldId => {
+    if (
+      profile === 'pei' ||
+      permissions
+        .filter(arr => arr.permission === 'update')
+        .map(arr => arr.id)
+        .includes(fieldId)
+    ) {
+      return 'update';
+    }
+    return 'read';
+  };
+
   return (
     <div className="page">
       <Helmet>
@@ -246,7 +330,8 @@ export default function CursoPage() {
                 form={form}
                 handleChange={updateField}
                 nextStep={nextStep}
-                permissions={permissions}
+                hasPermission={canSee}
+                canEdit={canEdit}
               />
             )}
           </div>
@@ -258,6 +343,8 @@ export default function CursoPage() {
               <TableVagas
                 vagas={form.vagas}
                 handleChangeVagas={handleChangeVagas}
+                hasPermission={canSee}
+                canEdit={canEdit}
               />
             )}
           </div>
@@ -285,18 +372,6 @@ export default function CursoPage() {
                 laboratorios={form.laboratorios}
                 handleChange={handleChangeLaboratorio}
                 label="Laboratórios"
-                options={[
-                  {
-                    key: 'labhard',
-                    value: 'labhard',
-                    label: 'Laboratório de Hardware',
-                  },
-                  {
-                    key: 'fislab',
-                    value: 'fislab',
-                    label: 'Laboratório de Física',
-                  },
-                ]}
               />
             )}
           </div>
@@ -333,7 +408,7 @@ export default function CursoPage() {
         <Button
           variant="contained"
           color="primary"
-          onClick={adjustForm}
+          onClick={canSee}
           className={classes.buttonStep}
         >
           Test

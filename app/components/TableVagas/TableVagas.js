@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 1150,
   },
+  paper: {
+    padding: theme.spacing(3, 2),
+  },
 }));
 
 const vagasDefault = {
@@ -94,7 +97,7 @@ export default function TableVagas(props) {
 
   return (
     <Paper className={classes.root}>
-      { vagas && vagas.matutino && (
+       { vagas && vagas.matutino && (
       <TableMaterial className={classes.table}>
         <TableHead>
           <TableRow>
@@ -460,7 +463,7 @@ export default function TableVagas(props) {
           </TableRow>
         </TableBody>
       </TableMaterial>
-      )}
+       )}
     </Paper>
   );
 }
