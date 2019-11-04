@@ -73,7 +73,7 @@ export default function TableVagas(props) {
   const classes = useStyles();
 
   const [vagas, setVagas] = useState(vagasDefault);
-  const { handleChangeVagas } = props;
+  const { handleChangeVagas, canSee } = props;
 
   useEffect(() => {
     if (props.vagas) {
@@ -95,7 +95,7 @@ export default function TableVagas(props) {
     handleChangeVagas(obj);
   };
 
-  return (
+  return (   
     <Paper className={classes.root}>
        { vagas && vagas.matutino && (
       <TableMaterial className={classes.table}>

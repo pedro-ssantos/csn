@@ -50,7 +50,7 @@ export default function CursoPage() {
   const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [permissions, setPermissions] = useState([]);
-  const stepMax = 4;
+  const stepMax = 5;
   const reNum = /^[0-9\b]+$/;
   const resourcesOptions = [
     { name: 'braile', label: 'Material em braille' },
@@ -156,23 +156,6 @@ export default function CursoPage() {
     }
   };
 
-  /**
-   * Return de size of the step in order to get the next/previous permissioned step.
-   */
-  const stepSize = () => {
-    // Default Size.
-    let size = 1;
-
-    if (!canSee('tableVagas')) {
-      size++;
-    }
-    if (!canSee('acessibilityResources')) {
-      size++;
-    }
-
-    return size;
-  };
-
   const nextStep = () => {
     switch (step) {
       case 1:
@@ -182,16 +165,22 @@ export default function CursoPage() {
         } else if (canSee('acessibilityResources')) {
           setStep(3);
           break;
-        } else {
+        } else if (canSee('laboratorios')){
           setStep(4);
+          break;
+        } else {
+          setStep(5)
           break;
         }
       case 2:
         if (canSee('acessibilityResources')) {
           setStep(3);
           break;
-        } else {
+        } else if (canSee('laboratorios')){
           setStep(4);
+          break;
+        } else {
+          setStep(5);
           break;
         }
       default:
@@ -377,7 +366,7 @@ export default function CursoPage() {
           </div>
         </Fade>
       </form>
-
+      
       <div className={classes.buttonsSteps}>
         <Button
           variant="contained"
@@ -405,14 +394,6 @@ export default function CursoPage() {
           Salvar
         </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={canSee}
-          className={classes.buttonStep}
-        >
-          Test
-        </Button>
       </div>
 
       <Dialog
