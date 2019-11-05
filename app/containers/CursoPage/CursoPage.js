@@ -9,12 +9,11 @@ import {
   DialogContentText,
   DialogTitle,
   Fade,
-  Snackbar,
-  MySnackbarContentWrapper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
+import Snackbar from './../../components/Snackbar';
 import TableAccessibilityResources from './../../components/TableAccessibilityResources';
 import apiService from './../../services/apiService';
 import FormCursoDetails from './FormCursoDetails';
@@ -111,8 +110,10 @@ export default function CursoPage() {
         data: form,
       });
 
-      if (res.status == 200) {
+      if (res.status === 200) {
+        console.log('Salvando ...');
         setSaveDialog(true);
+        console.log('Salvo com sucesso.');
       }
     } catch (errors) {
       setDialogErrors(errors);
@@ -127,7 +128,6 @@ export default function CursoPage() {
     //Vagas por Turnos
     obj = form;
     if (obj.vagas) {
-      console.log(obj.vagas);
       for (let [turno, campos] of Object.entries(obj.vagas)) {
         if (campos.status === true) {
           for (let [campo, value] of Object.entries(campos)) {
@@ -218,18 +218,22 @@ export default function CursoPage() {
         setStep(step > 1 ? step - 1 : step);
     }
   };
-  
+
   /**
    * É a última aba do cliente.
    */
   const isLast = () => {
     switch (step) {
       case 1:
-        if (!canSee('tableVagas') && !canSee('acessibilityResources') && !canSee('laboratorios')){
+        if (
+          !canSee('tableVagas') &&
+          !canSee('acessibilityResources') &&
+          !canSee('laboratorios')
+        ) {
           return true;
         }
         return false;
-      case 2: 
+      case 2:
         if (!canSee('acessibilityResources') && !canSee('laboratorios')) {
           return true;
         }
@@ -242,7 +246,7 @@ export default function CursoPage() {
       default:
         return false;
     }
-  }
+  };
 
   useEffect(() => {
     async function getForm() {
@@ -259,7 +263,6 @@ export default function CursoPage() {
         );
         let perm = resFormConfig.data.fields;
         let prof = resFormConfig.data.responsible;
-        console.log(perm.status);
         setProfile(prof);
         setPermissions(perm);
 
@@ -286,7 +289,6 @@ export default function CursoPage() {
     }
     getForm();
   }, []);
-
 
   const handleChangeVagas = vagas => {
     setFormValues(prevState => ({
@@ -424,6 +426,12 @@ export default function CursoPage() {
         >
           Salvar
         </Button>
+
+        <Snackbar
+          open={saveDialog}
+          message={"Informações gravadas com sucesso!"}
+        />
+
       </div>
 
       <Dialog
@@ -452,20 +460,6 @@ export default function CursoPage() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={saveDialog}
-        autoHideDuration={6000}
-      >
-        <MySnackbarContentWrapper
-          variant="success"
-          message="This is a success message!"
-        />
-      </Snackbar>
     </div>
   );
 }
