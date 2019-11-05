@@ -9,6 +9,8 @@ import {
   DialogContentText,
   DialogTitle,
   Fade,
+  Snackbar,
+  MySnackbarContentWrapper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
@@ -50,7 +52,8 @@ export default function CursoPage() {
   const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [permissions, setPermissions] = useState([]);
-  const stepMax = 5;
+  const [saveDialog, setSaveDialog] = useState(false);
+  const stepMax = 4;
   const reNum = /^[0-9\b]+$/;
   const resourcesOptions = [
     { name: 'braile', label: 'Material em braille' },
@@ -107,8 +110,11 @@ export default function CursoPage() {
       const res = await apiService.request('put', 'form/' + formConfigId, {
         data: form,
       });
+
+      if (res.status == 200) {
+        setSaveDialog(true);
+      }
     } catch (errors) {
-      // console.log(errors);
       setDialogErrors(errors);
       setDialogErrorsOpen(true);
       // alert('Erro ao salvar formulário');
@@ -121,6 +127,7 @@ export default function CursoPage() {
     //Vagas por Turnos
     obj = form;
     if (obj.vagas) {
+      console.log(obj.vagas);
       for (let [turno, campos] of Object.entries(obj.vagas)) {
         if (campos.status === true) {
           for (let [campo, value] of Object.entries(campos)) {
@@ -135,7 +142,7 @@ export default function CursoPage() {
       }
     }
 
-    // Deficiencia
+    // Acessibilidade
     if (obj.recursosAcessibilidade.possui == 'Sim') {
       for (const [field, value] of Object.entries(obj.recursosAcessibilidade)) {
         if (field != 'possui' && value == null) {
@@ -165,26 +172,24 @@ export default function CursoPage() {
         } else if (canSee('acessibilityResources')) {
           setStep(3);
           break;
-        } else if (canSee('laboratorios')){
+        } else if (canSee('laboratorios')) {
           setStep(4);
-          break;
-        } else {
-          setStep(5)
           break;
         }
       case 2:
         if (canSee('acessibilityResources')) {
           setStep(3);
           break;
-        } else if (canSee('laboratorios')){
+        } else if (canSee('laboratorios')) {
           setStep(4);
           break;
-        } else {
-          setStep(5);
-          break;
+        }
+      case 3:
+        if (canSee('laboratorios')) {
+          setStep(4);
         }
       default:
-        setStep(step < stepMax - 1 ? step + 1 : stepMax);
+        break;
     }
   };
 
@@ -213,6 +218,31 @@ export default function CursoPage() {
         setStep(step > 1 ? step - 1 : step);
     }
   };
+  
+  /**
+   * É a última aba do cliente.
+   */
+  const isLast = () => {
+    switch (step) {
+      case 1:
+        if (!canSee('tableVagas') && !canSee('acessibilityResources') && !canSee('laboratorios')){
+          return true;
+        }
+        return false;
+      case 2: 
+        if (!canSee('acessibilityResources') && !canSee('laboratorios')) {
+          return true;
+        }
+        return false;
+      case 3:
+        if (!canSee('laboratorios')) {
+          return true;
+        }
+        return false;
+      default:
+        return false;
+    }
+  }
 
   useEffect(() => {
     async function getForm() {
@@ -229,7 +259,7 @@ export default function CursoPage() {
         );
         let perm = resFormConfig.data.fields;
         let prof = resFormConfig.data.responsible;
-        console.log(perm);
+        console.log(perm.status);
         setProfile(prof);
         setPermissions(perm);
 
@@ -256,6 +286,7 @@ export default function CursoPage() {
     }
     getForm();
   }, []);
+
 
   const handleChangeVagas = vagas => {
     setFormValues(prevState => ({
@@ -366,7 +397,7 @@ export default function CursoPage() {
           </div>
         </Fade>
       </form>
-      
+
       <div className={classes.buttonsSteps}>
         <Button
           variant="contained"
@@ -379,7 +410,7 @@ export default function CursoPage() {
         <Button
           variant="contained"
           onClick={nextStep}
-          disabled={step == stepMax}
+          disabled={step == stepMax || isLast()}
           className={classes.buttonStep}
         >
           Próximo
@@ -387,13 +418,12 @@ export default function CursoPage() {
         <Button
           variant="contained"
           color="primary"
-          onClick={save}
-          disabled={step != stepMax}
+          disabled={step != stepMax && !isLast()}
           className={classes.buttonStep}
+          onClick={save}
         >
           Salvar
         </Button>
-
       </div>
 
       <Dialog
@@ -422,6 +452,20 @@ export default function CursoPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={saveDialog}
+        autoHideDuration={6000}
+      >
+        <MySnackbarContentWrapper
+          variant="success"
+          message="This is a success message!"
+        />
+      </Snackbar>
     </div>
   );
 }
