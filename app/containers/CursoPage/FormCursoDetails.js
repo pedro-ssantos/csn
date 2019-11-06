@@ -51,6 +51,8 @@ export default function FormCursoDetails(props) {
             <TextField
               name="codigoeMec"
               value={form.codigoeMec}
+              type="number"
+              inputProps={{ min: "0", max: "10", step: "1" }}
               handleChange={props.handleChange}
               label="Código do curso e-MEC"
               permission={canEdit('codigoeMec')}

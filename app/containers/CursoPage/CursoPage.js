@@ -166,7 +166,7 @@ export default function CursoPage() {
   const nextStep = () => {
     switch (step) {
       case 1:
-        if (canSee('tableVagas')) {
+        if (canSee('tableVagas')) {          
           setStep(2);
           break;
         } else if (canSee('acessibilityResources')) {

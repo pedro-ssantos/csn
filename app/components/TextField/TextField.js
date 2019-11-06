@@ -22,6 +22,7 @@ export default function TextField(props) {
       name={props.name}
       id={props.id}
       label={props.label}
+      type={props.type}
       margin="normal"
       variant="outlined"
       required      
