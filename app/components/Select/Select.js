@@ -7,10 +7,6 @@ export default function Select(props) {
   const [labelWidth, setLabelWidth] = React.useState(0);
   const [options, setOptions] = React.useState([]);
   const useStyles = makeStyles(theme => ({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
     formControl: {
       margin: theme.spacing(1.5),
       minWidth: 320,
@@ -29,10 +25,11 @@ export default function Select(props) {
   }, [props.options]);
 
   return (
-    <FormControl required variant="outlined" className={classes.formControl} >
+    <FormControl required variant="outlined" className={classes.formControl}>
       <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
         {props.label}
       </InputLabel>
+
       <SelectMaterial
         value={props.value}
         disabled={props.permission === 'update' ? false : true}
@@ -45,7 +42,7 @@ export default function Select(props) {
       >
         <MenuItem value="">
           <em>Selecione</em>
-        </MenuItem >
+        </MenuItem>
         {options.map(option => (
           <MenuItem key={option.key} value={option.key}>
             {option.label}

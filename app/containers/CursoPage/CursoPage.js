@@ -13,7 +13,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
-import Snackbar from './../../components/Snackbar';
+import CustomizedSnackbars from './../../components/CustomizedSnackbars';
 import TableAccessibilityResources from './../../components/TableAccessibilityResources';
 import apiService from './../../services/apiService';
 import FormCursoDetails from './FormCursoDetails';
@@ -51,9 +51,8 @@ export default function CursoPage() {
   const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [permissions, setPermissions] = useState([]);
-  const [saveDialog, setSaveDialog] = useState(false);
+  const [snackbar, setSnackbar] = useState(false);
   const stepMax = 4;
-  const reNum = /^[0-9\b]+$/;
   const resourcesOptions = [
     { name: 'braile', label: 'Material em braille' },
     {
@@ -111,9 +110,8 @@ export default function CursoPage() {
       });
 
       if (res.status === 200) {
-        console.log('Salvando ...');
-        setSaveDialog(true);
-        console.log('Salvo com sucesso.');
+        setSnackbar(true);
+        setStep(1);
       }
     } catch (errors) {
       setDialogErrors(errors);
@@ -166,7 +164,7 @@ export default function CursoPage() {
   const nextStep = () => {
     switch (step) {
       case 1:
-        if (canSee('tableVagas')) {          
+        if (canSee('tableVagas')) {
           setStep(2);
           break;
         } else if (canSee('acessibilityResources')) {
@@ -333,6 +331,13 @@ export default function CursoPage() {
     return 'read';
   };
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar(false);
+  };
+
   return (
     <div className="page">
       <Helmet>
@@ -426,13 +431,14 @@ export default function CursoPage() {
         >
           Salvar
         </Button>
-
-        <Snackbar
-          open={saveDialog}
-          message={"Informações gravadas com sucesso!"}
-        />
-
       </div>
+
+      <CustomizedSnackbars
+        open={snackbar}
+        message={'Informações gravadas com sucesso!'}
+        variant="success"
+        handleClose={handleSnackbarClose}
+      />
 
       <Dialog
         open={dialogErrorsOpen}
