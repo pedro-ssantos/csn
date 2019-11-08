@@ -25,6 +25,7 @@ export default function TextField(props) {
       type={props.type}
       margin="normal"
       variant="outlined"
+      InputProps={props.InputProps}
       required      
     />
   );
