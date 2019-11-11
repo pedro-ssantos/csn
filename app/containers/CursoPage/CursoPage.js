@@ -175,7 +175,7 @@ export default function CursoPage() {
           break;
         }
       case 2:
-        if (canSee('acessibilityResources')) {
+        if (canSee('accessibilityResources')) {
           setStep(3);
           break;
         } else if (canSee('laboratorios')) {
