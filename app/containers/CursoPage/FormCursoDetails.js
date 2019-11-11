@@ -7,8 +7,6 @@ import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import HelpIcon from '@material-ui/icons/Help';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import Grid from '@material-ui/core/Grid';
 import CustomizedSnackbars from './../../components/CustomizedSnackbars';
 
@@ -30,6 +28,7 @@ function openHelp(){
     <CustomizedSnackbars
         message={'Informações gravadas com sucesso!'}
         variant="success"
+        open={true}
       />
   );
 }
