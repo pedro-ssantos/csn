@@ -10,6 +10,10 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import HelpIcon from '@material-ui/icons/Help';
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +30,10 @@ const useStyles = makeStyles(theme => ({
   },
   tableCellOdd: {
     backgroundColor: '#f3f3f3',
+  },
+  help: {
+    paddingLeft: 5,
+    paddingBottom: 3,
   },
 }));
 
@@ -44,6 +52,16 @@ const resourcesDefault = {
   insercaoDisciplinaSinais: null,
   materialDigitalAcessivel: null,
 };
+
+const HelpTooltip = withStyles(theme => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 export default function TableAccessibilityResources(props) {
   const classes = useStyles();
@@ -78,6 +96,19 @@ export default function TableAccessibilityResources(props) {
       <Box component="span" m={2}>
         Curso garante condições de ensino-aprendizagem para pessoas com
         deficiência?
+        <HelpTooltip
+          title={
+            <React.Fragment>
+              <Typography align="justify" variant="body2">
+                {
+                  'Recursos e materiais didáticos adaptados para atender pessoas com deficiência.'
+                }
+              </Typography>
+            </React.Fragment>
+          }
+        >
+          <HelpIcon fontSize="small" color="action" className={classes.help} />
+        </HelpTooltip>
         <Radio
           name="possui"
           value="Sim"
@@ -104,33 +135,57 @@ export default function TableAccessibilityResources(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {options.map((option, index) => (
-              <TableRow className={index % 2 ? '' : classes.tableCellOdd}>
-                <TableCell className={classes.tableCondensed}>
-                  {option.label}
-                </TableCell>
-                <TableCell className={classes.tableCondensed}>
-                  <Radio
-                    name={option.name}
-                    value="Sim"
-                    checked={
-                      recursosAcessibilidade[option.name] === 'Sim' ? true : ''
-                    }
-                    onChange={handleChange}
-                  />
-                </TableCell>
-                <TableCell className={classes.tableCondensed}>
-                  <Radio
-                    name={option.name}
-                    value="Não"
-                    checked={
-                      recursosAcessibilidade[option.name] === 'Não' ? true : ''
-                    }
-                    onChange={handleChange}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            {options.map(
+              (option, index) => (
+                console.log(option),
+                (
+                  <TableRow className={index % 2 ? '' : classes.tableCellOdd}>
+                    <TableCell className={classes.tableCondensed}>
+                      {option.label}
+                      <HelpTooltip
+                        title={
+                          <React.Fragment>
+                            <Typography align="justify" variant="body2">
+                              {option.instrucoes}
+                            </Typography>
+                          </React.Fragment>
+                        }
+                      >
+                        <HelpIcon
+                          fontSize="small"
+                          color="action"
+                          className={classes.help}
+                        />
+                      </HelpTooltip>
+                    </TableCell>
+                    <TableCell className={classes.tableCondensed}>
+                      <Radio
+                        name={option.name}
+                        value="Sim"
+                        checked={
+                          recursosAcessibilidade[option.name] === 'Sim'
+                            ? true
+                            : ''
+                        }
+                        onChange={handleChange}
+                      />
+                    </TableCell>
+                    <TableCell className={classes.tableCondensed}>
+                      <Radio
+                        name={option.name}
+                        value="Não"
+                        checked={
+                          recursosAcessibilidade[option.name] === 'Não'
+                            ? true
+                            : ''
+                        }
+                        onChange={handleChange}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              ),
+            )}
           </TableBody>
         </Table>
       )}

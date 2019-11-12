@@ -19,6 +19,10 @@ const useStyles = makeStyles(theme => ({
   icon: {
     margin: 'none',
   },
+  help:{
+    paddingLeft: 5,
+    paddingBottom: 3,
+  },
 }));
 
 export default function FormCursoDetails(props) {
@@ -50,18 +54,7 @@ export default function FormCursoDetails(props) {
                 handleChange={props.handleChange}
                 label="Nome do curso"
                 permission={canEdit('nome')}
-              />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              />              
             </Fragment>
           )}
           {hasPermission('codigoeMec') && (
@@ -74,18 +67,7 @@ export default function FormCursoDetails(props) {
                 handleChange={props.handleChange}
                 label="Código do curso e-MEC"
                 permission={canEdit('codigoeMec')}
-              />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              />              
             </Fragment>
           )}
           {hasPermission('nivelAcademico') && (
@@ -104,17 +86,7 @@ export default function FormCursoDetails(props) {
                   },
                 ]}
               />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              
             </Fragment>
           )}
           {hasPermission('grauAcademico') && (
@@ -131,17 +103,7 @@ export default function FormCursoDetails(props) {
                   { key: 'Tecnológo', label: 'Tecnológo' },
                 ]}
               />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              
             </Fragment>
           )}
           {hasPermission('atributoIngresso') && (
@@ -165,17 +127,7 @@ export default function FormCursoDetails(props) {
                   },
                 ]}
               />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              
             </Fragment>
           )}
           {hasPermission('modalidadeEnsino') && (
@@ -190,18 +142,7 @@ export default function FormCursoDetails(props) {
                   { key: 'Presencial', label: 'Presencial' },
                   { key: 'Curso a distância', label: 'Curso a distância' },
                 ]}
-              />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              />              
             </Fragment>
           )}
           {hasPermission('alunoVinculado') && (
@@ -220,14 +161,16 @@ export default function FormCursoDetails(props) {
               />
               <HelpTooltip
                 title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
+                  <React.Fragment>                    
+                    <Typography align="justify" variant="body2"> 
+                      {
+                        'Curso ofertado pela IES, que possui aluno vinculado em uma ou mais das seguintes situações: cursando, matricula trancada, desvinculado do curso, formado, falecido ou transferido para outro curso na mesma IES.'
+                      }
+                    </Typography>
                   </React.Fragment>
                 }
               >
-                <HelpIcon fontSize="small" />
+                <HelpIcon fontSize="small" color="action" className={classes.help}/>
               </HelpTooltip>
             </Fragment>
           )}
@@ -244,18 +187,7 @@ export default function FormCursoDetails(props) {
                   { key: 'Em atividade', label: 'Em atividade' },
                   { key: 'Em extinção', label: 'Em extinção' },
                 ]}
-              />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              />             
             </Fragment>
           )}
           {hasPermission('tipoOferta') && (
@@ -270,18 +202,7 @@ export default function FormCursoDetails(props) {
                   { key: 'Regular', label: 'Regular' },
                   { key: 'Especial', label: 'Especial' },
                 ]}
-              />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              />              
             </Fragment>
           )}
           {hasPermission('teveAlunoVinculado') && (
@@ -296,22 +217,11 @@ export default function FormCursoDetails(props) {
                   { key: 'Sim', label: 'Sim' },
                   { key: 'Não', label: 'Não' },
                 ]}
-              />
-              <HelpTooltip
-                title={
-                  <React.Fragment>
-                    <Typography color="inherit">Nome Do curso</Typography>
-                    <em>{"And here's"}</em> <b>{'some'}</b>{' '}
-                    <u>{'amazing content'}</u>. {"It's very engaging. Right?"}
-                  </React.Fragment>
-                }
-              >
-                <HelpIcon fontSize="small" />
-              </HelpTooltip>
+              />              
             </Fragment>
           )}
         </div>
-      </Paper>      
+      </Paper>
     </React.Fragment>
   );
 }
