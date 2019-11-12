@@ -10,6 +10,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import apiService from './../../services/apiService';
+import HelpIcon from '@material-ui/icons/Help';
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,7 +35,21 @@ const useStyles = makeStyles(theme => ({
   noLabel: {
     marginTop: theme.spacing(3),
   },
+  help:{
+    paddingLeft: 5,
+    paddingBottom: 3,
+  },
 }));
+
+const HelpTooltip = withStyles(theme => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -59,9 +77,9 @@ export default function ChipSelect(props) {
   const { label } = props;
   const { laboratorios } = props;
   const [options, setOptions] = useState([]);
-  const {handleChange} = props;
+  const { handleChange } = props;
 
-  const selecteds = (selected) => (
+  const selecteds = selected => (
     <div className={classes.chips}>
       {selected.map(value => (
         <Chip key={value} label={value} className={classes.chip} />
@@ -86,6 +104,19 @@ export default function ChipSelect(props) {
     <Paper className={classes.root}>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="select-multiple-chip">{label}</InputLabel>
+        <HelpTooltip
+          title={
+            <React.Fragment>
+              <Typography align="justify" variant="body2">
+                {
+                  'Espaços ou núcleos de atividades especializadas, utilizados pelos alunos do curso em aulas e/ou estágios de práticas profissionais. Incluem os laboratórios, clínicas, escritórios modelo, fazendas experimentais e outros.'
+                }
+              </Typography>
+            </React.Fragment>
+          }
+        >
+          <HelpIcon fontSize="small" color="action" className={classes.help} />
+        </HelpTooltip>
         <Select
           multiple
           value={laboratorios}
@@ -104,6 +135,7 @@ export default function ChipSelect(props) {
             </MenuItem>
           ))}
         </Select>
+        
       </FormControl>
     </Paper>
   );
