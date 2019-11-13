@@ -56,6 +56,18 @@ router.post('/admin/form/', async (req, res, next) => {
       formConfigObj.responsible = "pei"
       formConfigObj.formId = ObjectID(formAdded.ops[0]._id)
       await db.collection('formConfig').insert(formConfigObj,{w:1})
+      formConfigObj.responsible = "colegiado"
+      formConfigObj.fields = [
+        {
+          id : "accessibilityResources",
+          permission : "update"
+        },
+        {
+          id : "laboratorios",
+          permission : "update"
+        }, 
+      ]
+      await db.collection('formConfig').insert(formConfigObj,{w:1})
       res.status(200).send()
     } catch (error) {
       console.log(error)
@@ -264,7 +276,6 @@ const cursoModel = {
   "situacaoFuncionamento": null,
   "alunoVinculado": null,
   "tipoOferta": null,
-  "tipoOfertaQual": null,
   "teveAlunoVinculado": null,
   "vagas": {
     "matutino": {
