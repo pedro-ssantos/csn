@@ -52,10 +52,12 @@ router.post('/admin/form/', async (req, res, next) => {
       let form = JSON.parse(JSON.stringify(cursoModel))
       form.nome = req.body.form.nome
       const formAdded = await db.collection('form').insert(form,{w:1})
-      let formConfigObj = req.body.config
-      formConfigObj.responsible = "pei"
+      let formConfigObj = JSON.parse(JSON.stringify(req.body.config))
       formConfigObj.formId = ObjectID(formAdded.ops[0]._id)
+      formConfigObj.responsible = "pei"
       await db.collection('formConfig').insert(formConfigObj,{w:1})
+      formConfigObj = JSON.parse(JSON.stringify(req.body.config))
+      formConfigObj.formId = ObjectID(formAdded.ops[0]._id)
       formConfigObj.responsible = "colegiado"
       formConfigObj.fields = [
         {
