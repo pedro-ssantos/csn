@@ -8,7 +8,8 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
     return (
       <div className="header">
         <div className="nav-bar">
-          <Link className="router-link" to="/">
+
+          {/* <Link className="router-link" to="/">
             Inicial
           </Link>
           <Link className="router-link" to="/curso/5d8a74e97b79da45f98a2992">
@@ -22,7 +23,8 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           </Link>
           <Link className="router-link" to="/admin">
             Admin
-          </Link>
+          </Link> */}
+
         </div>
       </div>
     );
