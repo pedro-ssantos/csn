@@ -8,15 +8,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Fade,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import TableVagas from './../../components/TableVagas';
-import ChipSelect from './../../components/ChipSelect';
 import CustomizedSnackbars from './../../components/CustomizedSnackbars';
-import TableAccessibilityResources from './../../components/TableAccessibilityResources';
 import apiService from './../../services/apiService';
-import FormCursoDetails from './FormCursoDetails';
+import CursoForm from './CursoForm';
+import ButtonsGroup from './ButtonsGroup';
 
 const formDefault = {
   nome: '',
@@ -385,88 +382,28 @@ export default function CursoPage() {
       </Helmet>
       <h1>Curso</h1>
 
-      <form autoComplete="off">
-        <Fade in={step === 1 ? true : false}>
-          <div>
-            {step === 1 && (
-              <FormCursoDetails
-                form={form}
-                handleChange={updateField}
-                nextStep={nextStep}
-                hasPermission={canSee}
-                canEdit={canEdit}
-              />
-            )}
-          </div>
-        </Fade>
-
-        <Fade in={step === 2 ? true : false}>
-          <div>
-            {step === 2 && (
-              <TableVagas
-                vagas={form.vagas}
-                handleChangeVagas={handleChangeVagas}
-                hasPermission={canSee}
-                canEdit={canEdit}
-              />
-            )}
-          </div>
-        </Fade>
-
-        <Fade in={step === 3 ? true : false}>
-          <div>
-            {step === 3 && (
-              <TableAccessibilityResources
-                tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-                options={resourcesOptions}
-                recursosAcessibilidade={form.recursosAcessibilidade}
-                handleChangeRecursosAcessibilidade={
-                  handleChangeRecursosAcessibilidade
-                }
-              />
-            )}
-          </div>
-        </Fade>
-
-        <Fade in={step === 4 ? true : false}>
-          <div>
-            {step === 4 && (
-              <ChipSelect
-                laboratorios={form.laboratorios}
-                handleChange={handleChangeLaboratorio}
-                label="Laboratórios"
-              />
-            )}
-          </div>
-        </Fade>
-      </form>
+      <CursoForm
+        step={step}
+        form={form}
+        updateField={updateField}
+        nextStep={nextStep}
+        canSee={canSee}
+        canEdit={canEdit}
+        handleChangeVagas={handleChangeVagas}
+        resourcesOptions={resourcesOptions}
+        handleChangeRecursosAcessibilidade={handleChangeRecursosAcessibilidade}
+        handleChangeLaboratorio={handleChangeLaboratorio}
+      />
 
       <div className={classes.buttonsSteps}>
-        <Button
-          variant="contained"
-          onClick={prevStep}
-          disabled={step <= 1}
-          className={classes.buttonStep}
-        >
-          Voltar
-        </Button>
-        <Button
-          variant="contained"
-          onClick={nextStep}
-          disabled={step == stepMax || isLast()}
-          className={classes.buttonStep}
-        >
-          Próximo
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={step != stepMax && !isLast()}
-          className={classes.buttonStep}
-          onClick={save}
-        >
-          Salvar
-        </Button>
+        <ButtonsGroup
+          prevStep={prevStep}
+          nextStep={nextStep}
+          step={step}
+          stepMax={stepMax}
+          save={save}
+          isLast={isLast}
+        />
       </div>
 
       <CustomizedSnackbars
