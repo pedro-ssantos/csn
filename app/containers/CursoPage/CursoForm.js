@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.scss';
 import { Fade } from '@material-ui/core';
-import TableVagas from './../../components/TableVagas';
-import ChipSelect from './../../components/ChipSelect';
-import TableAccessibilityResources from './../../components/TableAccessibilityResources';
+import CursoVagas from './CursoVagas';
+import CursoLabs from './CursoLabs';
+import CursoAccessibilityResources from './CursoAccessibilityResources';
 import CursoDetails from './CursoDetails';
 
 function withFade(Component) {
@@ -31,11 +31,11 @@ function CursoForm(props) {
   } = props;
 
   const CursoDetailsWithFade = withFade(CursoDetails);
-  const TableVagasWithFade = withFade(TableVagas);
-  const TableAccessibilityResourcesWithFade = withFade(
-    TableAccessibilityResources,
+  const CursoVagasWithFade = withFade(CursoVagas);
+  const CursoLabsWithFade = withFade(CursoLabs);
+  const CursoAccessibilityResourcesWithFade = withFade(
+    CursoAccessibilityResources,
   );
-  const ChipSelectWithFade = withFade(ChipSelect);
 
   return (
     <form autoComplete="off">
@@ -51,7 +51,7 @@ function CursoForm(props) {
       )}
 
       {step === 2 && (
-        <TableVagasWithFade
+        <CursoVagasWithFade
           vagas={form.vagas}
           handleChangeVagas={handleChangeVagas}
           hasPermission={canSee}
@@ -61,7 +61,7 @@ function CursoForm(props) {
       )}
 
       {step === 3 && (
-        <TableAccessibilityResourcesWithFade
+        <CursoAccessibilityResourcesWithFade
           tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
           options={resourcesOptions}
           recursosAcessibilidade={form.recursosAcessibilidade}
@@ -73,7 +73,7 @@ function CursoForm(props) {
       )}
 
       {step === 4 && (
-        <ChipSelectWithFade
+        <CursoLabsWithFade
           laboratorios={form.laboratorios}
           handleChange={handleChangeLaboratorio}
           label="Laboratórios"
