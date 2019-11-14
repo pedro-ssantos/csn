@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import TextField from './../../components/TextField';
-import Select from './../../components/Select';
+import TextField from '../../components/TextField';
+import Select from '../../components/Select';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import HelpIcon from '@material-ui/icons/Help';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function FormCursoDetails(props) {
+export default function CursoDetails(props) {
   const { form } = props;
   const { hasPermission, canEdit } = props;
   const classes = useStyles();
