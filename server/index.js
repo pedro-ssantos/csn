@@ -14,7 +14,7 @@ const app = express();
 const enableCORS = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, token, Content-Length, X-Requested-With, *');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, token, Content-Length, X-Requested-With, peiadmin, *');
   if ('OPTIONS' == req.method) {
     res.sendStatus(200)
   }
@@ -26,6 +26,19 @@ const enableCORS = (req, res, next) => {
 app.use(enableCORS);
 app.use(bodyParser.json());
 app.use('/api', routes);
+
+app.all('*', (req,res,next) =>{
+  const reqInfo = req.url.split('/');
+  if (reqInfo[1] && reqInfo[1] == 'admin') {
+    if (req.headers['peiadmin'] && req.headers['peiadmin'] == 'censo2019') {
+      next();
+    } else {
+      res.status(404).send();
+    }
+  } else {
+    next();
+  }
+})
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
