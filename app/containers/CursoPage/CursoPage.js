@@ -200,7 +200,7 @@ export default function CursoPage() {
         if (canSee('tableVagas')) {
           setStep(2);
           break;
-        } else if (canSee('acessibilityResources')) {
+        } else if (canSee('accessibilityResources')) {
           setStep(3);
           break;
         } else if (canSee('laboratorios')) {
@@ -227,7 +227,7 @@ export default function CursoPage() {
   const prevStep = () => {
     switch (step) {
       case 4:
-        if (canSee('acessibilityResources')) {
+        if (canSee('accessibilityResources')) {
           setStep(3);
           break;
         } else if (canSee('tableVagas')) {
@@ -258,14 +258,14 @@ export default function CursoPage() {
       case 1:
         if (
           !canSee('tableVagas') &&
-          !canSee('acessibilityResources') &&
+          !canSee('accessibilityResources') &&
           !canSee('laboratorios')
         ) {
           return true;
         }
         return false;
       case 2:
-        if (!canSee('acessibilityResources') && !canSee('laboratorios')) {
+        if (!canSee('accessibilityResources') && !canSee('laboratorios')) {
           return true;
         }
         return false;

@@ -12,21 +12,23 @@ const useStyles = makeStyles(theme => ({
 
 export default function TextField(props) {
   const classes = useStyles();
+  const {permission, value, handleChange, name, id, label, type, InputProps, ...rest} = props;
 
   return (
     <TextFieldMaterial
       className={classes.formControl}
-      disabled={props.permission === 'update' ? false : true}
-      value={props.value}
-      onChange={props.handleChange}
-      name={props.name}
-      id={props.id}
-      label={props.label}
-      type={props.type}
+      disabled={permission === 'update' ? false : true}
+      value={value}
+      onChange={handleChange}
+      name={name}
+      id={id}
+      label={label}
+      type={type}
       margin="normal"
       variant="outlined"
-      InputProps={props.InputProps}
+      InputProps={InputProps}
       required      
+      {...rest}
     />
   );
 }
