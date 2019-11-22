@@ -61,6 +61,10 @@ router.post('/admin/form/', async (req, res, next) => {
       formConfigObj.responsible = "colegiado"
       formConfigObj.fields = [
         {
+          id : "nome",
+          permission : "read"
+        },
+        {
           id : "accessibilityResources",
           permission : "update"
         },
