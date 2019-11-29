@@ -1,20 +1,12 @@
 import React from 'react';
 import './style.scss';
-import { Fade } from '@material-ui/core';
-import CursoVagas from './CursoVagas';
-import CursoLabs from './CursoLabs';
-import CursoAccessibilityResources from './CursoAccessibilityResources';
+import {
+  Fade,
+} from '@material-ui/core';
+import TableVagas from './../../components/TableVagas';
+import ChipSelect from './../../components/ChipSelect';
+import TableAccessibilityResources from './../../components/TableAccessibilityResources';
 import CursoDetails from './CursoDetails';
-
-function withFade(Component) {
-  return function({ open, ...props }) {
-    return (
-      <Fade in={open}>
-        <Component {...props} />
-      </Fade>
-    );
-  };
-}
 
 function CursoForm(props) {
   const {
@@ -29,57 +21,61 @@ function CursoForm(props) {
     handleChangeRecursosAcessibilidade,
     handleChangeLaboratorio,
   } = props;
-
-  const CursoDetailsWithFade = withFade(CursoDetails);
-  const CursoVagasWithFade = withFade(CursoVagas);
-  const CursoLabsWithFade = withFade(CursoLabs);
-  const CursoAccessibilityResourcesWithFade = withFade(
-    CursoAccessibilityResources,
-  );
-
   return (
     <form autoComplete="off">
-      {step === 1 && (
-        <CursoDetailsWithFade
-          form={form}
-          handleChange={updateField}
-          nextStep={nextStep}
-          hasPermission={canSee}
-          canEdit={canEdit}
-          open={step === 1 ? true : false}
-        />
-      )}
+      <Fade in={step === 1 ? true : false}>
+        <div>
+          {step === 1 && (
+            <CursoDetails
+              form={form}
+              handleChange={updateField}
+              nextStep={nextStep}
+              hasPermission={canSee}
+              canEdit={canEdit}
+            />
+          )}
+        </div>
+      </Fade>
 
-      {step === 2 && (
-        <CursoVagasWithFade
-          vagas={form.vagas}
-          handleChangeVagas={handleChangeVagas}
-          hasPermission={canSee}
-          canEdit={canEdit}
-          open={step === 2 ? true : false}
-        />
-      )}
+      <Fade in={step === 2 ? true : false}>
+        <div>
+          {step === 2 && (
+            <TableVagas
+              vagas={form.vagas}
+              handleChangeVagas={handleChangeVagas}
+              hasPermission={canSee}
+              canEdit={canEdit}
+            />
+          )}
+        </div>
+      </Fade>
 
-      {step === 3 && (
-        <CursoAccessibilityResourcesWithFade
-          tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-          options={resourcesOptions}
-          recursosAcessibilidade={form.recursosAcessibilidade}
-          handleChangeRecursosAcessibilidade={
-            handleChangeRecursosAcessibilidade
-          }
-          open={step === 3 ? true : false}
-        />
-      )}
+      <Fade in={step === 3 ? true : false}>
+        <div>
+          {step === 3 && (
+            <TableAccessibilityResources
+              tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+              options={resourcesOptions}
+              recursosAcessibilidade={form.recursosAcessibilidade}
+              handleChangeRecursosAcessibilidade={
+                handleChangeRecursosAcessibilidade
+              }
+            />
+          )}
+        </div>
+      </Fade>
 
-      {step === 4 && (
-        <CursoLabsWithFade
-          laboratorios={form.laboratorios}
-          handleChange={handleChangeLaboratorio}
-          label="Laboratórios"
-          open={step === 4 ? true : false}
-        />
-      )}
+      <Fade in={step === 4 ? true : false}>
+        <div>
+          {step === 4 && (
+            <ChipSelect
+              laboratorios={form.laboratorios}
+              handleChange={handleChangeLaboratorio}
+              label="Laboratórios"
+            />
+          )}
+        </div>
+      </Fade>
     </form>
   );
 }
