@@ -1,10 +1,24 @@
 # Acesso à instância AWS na Amazon
 
+## Gerenciamento
+
 https://aws.amazon.com/
 
 E-mail: censo@sandrosantos.net
 
 Senha: l9H7f5$cq?
+
+## ssh
+
+1 - Baixar o .pem que está presente no projeto
+
+2 - Na primeira vez, alterar a permissão do arquivo:
+
+`chmod 400 /path/my-key-pair.pem`
+
+3 - Acessar o servidor utilizando o seguinte comando:
+
+`ssh -i /path/arquivo.pem ubuntu@{endereçodaaplicação}`
 
 
 # Configurações do projeto:
