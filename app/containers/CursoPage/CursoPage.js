@@ -8,11 +8,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import CustomizedSnackbars from './../../components/CustomizedSnackbars';
 import apiService from './../../services/apiService';
 import CursoForm from './CursoForm';
+import CursoColegiadoForm from './CursoColegiadoForm';
 import ButtonsGroup from './ButtonsGroup';
 
 const formDefault = {
@@ -371,16 +373,18 @@ export default function CursoPage() {
     setSnackbar(false);
   };
 
+  const pageColegiado = () => {};
+
   return (
     <div className="page">
       <Helmet>
-        <title>Curso</title>
+        <title>Censo 2019</title>
         <meta
           name="description"
           content="Curso page of React.js Boilerplate application"
         />
       </Helmet>
-      <h1>Curso</h1>
+      <h1>Censo ensino superior 2019</h1>
 
       <CursoForm
         step={step}
@@ -393,6 +397,7 @@ export default function CursoPage() {
         resourcesOptions={resourcesOptions}
         handleChangeRecursosAcessibilidade={handleChangeRecursosAcessibilidade}
         handleChangeLaboratorio={handleChangeLaboratorio}
+        profile={profile}
       />
 
       <div className={classes.buttonsSteps}>

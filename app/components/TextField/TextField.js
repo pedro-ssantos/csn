@@ -25,7 +25,7 @@ export default function TextField(props) {
       label={label}
       type={type}
       margin="normal"
-      variant="outlined"
+      variant={props.variant ? props.variant : 'outlined'}
       InputProps={InputProps}
       required      
       {...rest}

@@ -1,14 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './style.scss';
-import {
-  Fade,
-} from '@material-ui/core';
+import { Fade, Collapse } from '@material-ui/core';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
 import TableAccessibilityResources from './../../components/TableAccessibilityResources';
 import CursoDetails from './CursoDetails';
 
 function CursoForm(props) {
+  const [show, setShow] = useState(false);
   const {
     step,
     form,
@@ -21,18 +20,41 @@ function CursoForm(props) {
     handleChangeRecursosAcessibilidade,
     handleChangeLaboratorio,
   } = props;
+
+  if (props.profile === 'colegiado') {
+    return (
+      <React.Fragment>
+        <h3>{`Informações do curso ${form.nome}`}</h3>
+          <TableAccessibilityResources
+            tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
+            options={resourcesOptions}
+            recursosAcessibilidade={form.recursosAcessibilidade}
+            handleChangeRecursosAcessibilidade={
+              handleChangeRecursosAcessibilidade
+            }
+          />
+          <ChipSelect
+              laboratorios={form.laboratorios}
+              handleChange={handleChangeLaboratorio}
+              label="Laboratórios"
+            />
+      </React.Fragment>
+    );
+  }
   return (
     <form autoComplete="off">
       <Fade in={step === 1 ? true : false}>
         <div>
           {step === 1 && (
-            <CursoDetails
-              form={form}
-              handleChange={updateField}
-              nextStep={nextStep}
-              hasPermission={canSee}
-              canEdit={canEdit}
-            />
+            <React.Fragment>
+              <CursoDetails
+                form={form}
+                handleChange={updateField}
+                nextStep={nextStep}
+                hasPermission={canSee}
+                canEdit={canEdit}
+              />
+            </React.Fragment>
           )}
         </div>
       </Fade>

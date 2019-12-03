@@ -9,11 +9,15 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Collapse,
+  IconButton,
 } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,7 +71,7 @@ export default function TableAccessibilityResources(props) {
   const classes = useStyles();
   const [options, setOptions] = useState([]);
   const { handleChangeRecursosAcessibilidade, tableLabel } = props;
-
+  const [toggle, setToggle] = useState(false);
   const [recursosAcessibilidade, setRecursosAcessibilidade] = useState(
     resourcesDefault,
   );
@@ -81,6 +85,10 @@ export default function TableAccessibilityResources(props) {
     setRecursosAcessibilidade(obj);
     handleChangeRecursosAcessibilidade(obj);
   };
+
+  const handleToggle = () => {
+    setToggle(!toggle);
+  }
 
   useEffect(() => {
     if (props.options) {
@@ -123,9 +131,12 @@ export default function TableAccessibilityResources(props) {
           onChange={handleChange}
         />
         Não
+        <IconButton aria-label="delete" onClick={handleToggle}>
+          {toggle ? <ExpandLessIcon /> : <ExpandMoreIcon />}          
+        </IconButton>
       </Box>
 
-      {recursosAcessibilidade.possui === 'Sim' && (
+      <Collapse in={recursosAcessibilidade.possui === 'Sim' || toggle}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -135,60 +146,51 @@ export default function TableAccessibilityResources(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {options.map(
-              (option, index) => (
-                console.log(option),
-                (
-                  <TableRow className={index % 2 ? '' : classes.tableCellOdd}>
-                    <TableCell className={classes.tableCondensed}>
-                      {option.label}
-                      <HelpTooltip
-                        title={
-                          <React.Fragment>
-                            <Typography align="justify" variant="body2">
-                              {option.instrucoes}
-                            </Typography>
-                          </React.Fragment>
-                        }
-                      >
-                        <HelpIcon
-                          fontSize="small"
-                          color="action"
-                          className={classes.help}
-                        />
-                      </HelpTooltip>
-                    </TableCell>
-                    <TableCell className={classes.tableCondensed}>
-                      <Radio
-                        name={option.name}
-                        value="Sim"
-                        checked={
-                          recursosAcessibilidade[option.name] === 'Sim'
-                            ? true
-                            : ''
-                        }
-                        onChange={handleChange}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.tableCondensed}>
-                      <Radio
-                        name={option.name}
-                        value="Não"
-                        checked={
-                          recursosAcessibilidade[option.name] === 'Não'
-                            ? true
-                            : ''
-                        }
-                        onChange={handleChange}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )
-              ),
-            )}
+            {options.map((option, index) => (
+              <TableRow className={index % 2 ? '' : classes.tableCellOdd}>
+                <TableCell className={classes.tableCondensed}>
+                  {option.label}
+                  <HelpTooltip
+                    title={
+                      <React.Fragment>
+                        <Typography align="justify" variant="body2">
+                          {option.instrucoes}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  >
+                    <HelpIcon
+                      fontSize="small"
+                      color="action"
+                      className={classes.help}
+                    />
+                  </HelpTooltip>
+                </TableCell>
+                <TableCell className={classes.tableCondensed}>
+                  <Radio
+                    name={option.name}
+                    value="Sim"
+                    checked={
+                      recursosAcessibilidade[option.name] === 'Sim' ? true : ''
+                    }
+                    onChange={handleChange}
+                  />
+                </TableCell>
+                <TableCell className={classes.tableCondensed}>
+                  <Radio
+                    name={option.name}
+                    value="Não"
+                    checked={
+                      recursosAcessibilidade[option.name] === 'Não' ? true : ''
+                    }
+                    onChange={handleChange}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
-      )}
+      </Collapse>
     </Paper>
   );
 }
