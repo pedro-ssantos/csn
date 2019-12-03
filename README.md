@@ -25,11 +25,24 @@ Senha: l9H7f5$cq?
 
 ## Gerar e publicar versão:
 
-Dar o seguinte comando:
+1 - No apiService certificar-se de que o apiUrl está definido como http://{endereçodaaplicação:porta}/api
+
+2 - Gerar o build:
 
 `yarn build`
 
-Depois copiar a pasta gerada (build) para o servidor
+3 - Copiar a pasta gerada (build) para o servidor
+
+4 - Iniciar o servidor (pm2):
+
+`pm2 start npm -- run start:prod`
+
+ou
+
+4 - Reniciar o servidor (pm2):
+
+`pm2 start 0`
+
 
 ## Gerar novo curso para preenchimento:
 
