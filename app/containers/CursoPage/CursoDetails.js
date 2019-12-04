@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    margin: theme.spacing(0, 10),
+    margin: theme.spacing(0, 2),
   },
   inline: {
     display: 'inline',
@@ -43,7 +43,7 @@ export default function CursoDetails(props) {
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
-        <h2>Informações do Curso</h2>
+        <h2>{`Informações do Curso ${form.nome}`}</h2>
 
         <div>
           {hasPermission('nome') && (

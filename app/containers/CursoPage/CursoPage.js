@@ -29,7 +29,7 @@ const formDefault = {
   tipoOferta: '',
   teveAlunoVinculado: '',
   vagas: {},
-  recursosAcessibilidade: {},
+  accessibilityResources: {},
   laboratorios: [],
 };
 
@@ -139,6 +139,7 @@ export default function CursoPage() {
   const save = async () => {
     try {
       adjustForm(form);
+      console.log(form);
       const formConfigId = window.location.pathname.split('/')[2];
       const res = await apiService.request('put', 'form/' + formConfigId, {
         data: form,
@@ -176,8 +177,8 @@ export default function CursoPage() {
     }
 
     // Acessibilidade
-    if (obj.recursosAcessibilidade.possui == 'Sim') {
-      for (const [field, value] of Object.entries(obj.recursosAcessibilidade)) {
+    if (obj.accessibilityResources.possui == 'Sim') {
+      for (const [field, value] of Object.entries(obj.accessibilityResources)) {
         if (field != 'possui' && value == null) {
           for (let option of resourcesOptions) {
             if (field == option.name) {
@@ -312,7 +313,7 @@ export default function CursoPage() {
         formDefaultNew.tipoOferta = formDb.tipoOferta;
         formDefaultNew.tipoOfertaQual = formDb.tipoOfertaQual;
         formDefaultNew.teveAlunoVinculado = formDb.teveAlunoVinculado;
-        formDefaultNew.recursosAcessibilidade = formDb.recursosAcessibilidade;
+        formDefaultNew.accessibilityResources = formDb.accessibilityResources;
         formDefaultNew.vagas = formDb.vagas;
         formDefaultNew.laboratorios = formDb.laboratorios;
         setFormValues(formDefaultNew);
@@ -330,10 +331,10 @@ export default function CursoPage() {
     }));
   };
 
-  const handleChangeRecursosAcessibilidade = recursos => {
+  const handleChangeAccessibilityResources = recursos => {
     setFormValues(prevState => ({
       ...prevState,
-      ['recursosAcessibilidade']: recursos,
+      ['accessibilityResources']: recursos,
     }));
   };
 
@@ -395,7 +396,7 @@ export default function CursoPage() {
         canEdit={canEdit}
         handleChangeVagas={handleChangeVagas}
         resourcesOptions={resourcesOptions}
-        handleChangeRecursosAcessibilidade={handleChangeRecursosAcessibilidade}
+        handleChangeAccessibilityResources={handleChangeAccessibilityResources}
         handleChangeLaboratorio={handleChangeLaboratorio}
         profile={profile}
       />

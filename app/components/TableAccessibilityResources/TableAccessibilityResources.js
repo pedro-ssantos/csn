@@ -70,9 +70,9 @@ const HelpTooltip = withStyles(theme => ({
 export default function TableAccessibilityResources(props) {
   const classes = useStyles();
   const [options, setOptions] = useState([]);
-  const { handleChangeRecursosAcessibilidade, tableLabel } = props;
+  const { handleChangeAccessibilityResources, tableLabel } = props;
   const [toggle, setToggle] = useState(false);
-  const [recursosAcessibilidade, setRecursosAcessibilidade] = useState(
+  const [accessibilityResources, setAccessibilityResources] = useState(
     resourcesDefault,
   );
 
@@ -80,10 +80,15 @@ export default function TableAccessibilityResources(props) {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     const name = e.target.name;
-    let obj = JSON.parse(JSON.stringify(recursosAcessibilidade));
+
+    let obj = JSON.parse(JSON.stringify(accessibilityResources));
+
+    if (name === 'possui' && value === 'Não'){
+      obj = resourcesDefault;
+    }
     obj[name] = value;
-    setRecursosAcessibilidade(obj);
-    handleChangeRecursosAcessibilidade(obj);
+    setAccessibilityResources(obj);
+    handleChangeAccessibilityResources(obj);
   };
 
   const handleToggle = () => {
@@ -94,10 +99,10 @@ export default function TableAccessibilityResources(props) {
     if (props.options) {
       setOptions(props.options);
     }
-    if (props.recursosAcessibilidade) {
-      setRecursosAcessibilidade(props.recursosAcessibilidade);
+    if (props.accessibilityResources) {
+      setAccessibilityResources(props.accessibilityResources);
     }
-  }, [props.options, props.recursosAcessibilidade]);
+  }, [props.options, props.accessibilityResources]);
 
   return (
     <Paper className={classes.root}>
@@ -120,27 +125,27 @@ export default function TableAccessibilityResources(props) {
         <Radio
           name="possui"
           value="Sim"
-          checked={recursosAcessibilidade.possui === 'Sim' ? true : ''}
+          checked={accessibilityResources.possui === 'Sim' ? true : ''}
           onChange={handleChange}
         />
         Sim
         <Radio
           name="possui"
           value="Não"
-          checked={recursosAcessibilidade.possui === 'Não' ? true : ''}
+          checked={accessibilityResources.possui === 'Não' ? true : ''}
           onChange={handleChange}
         />
         Não
-        <IconButton aria-label="delete" onClick={handleToggle}>
+        {/* <IconButton aria-label="delete" onClick={handleToggle}>
           {toggle ? <ExpandLessIcon /> : <ExpandMoreIcon />}          
-        </IconButton>
+        </IconButton> */}
       </Box>
 
-      <Collapse in={recursosAcessibilidade.possui === 'Sim' || toggle}>
+      <Collapse in={accessibilityResources.possui === 'Sim'}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>{tableLabel}</TableCell>
+              <TableCell>{tableLabel + "  (Preencher todos os campos)."}</TableCell>
               <TableCell>Sim</TableCell>
               <TableCell>Não</TableCell>
             </TableRow>
@@ -171,7 +176,7 @@ export default function TableAccessibilityResources(props) {
                     name={option.name}
                     value="Sim"
                     checked={
-                      recursosAcessibilidade[option.name] === 'Sim' ? true : ''
+                      accessibilityResources[option.name] === 'Sim' ? true : ''
                     }
                     onChange={handleChange}
                   />
@@ -181,7 +186,7 @@ export default function TableAccessibilityResources(props) {
                     name={option.name}
                     value="Não"
                     checked={
-                      recursosAcessibilidade[option.name] === 'Não' ? true : ''
+                      accessibilityResources[option.name] === 'Não' ? true : ''
                     }
                     onChange={handleChange}
                   />

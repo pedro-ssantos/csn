@@ -74,7 +74,7 @@ router.post('/admin/form/', async (req, res, next) => {
         }, 
       ]
       await db.collection('formConfig').insert(formConfigObj,{w:1})
-      res.status(200).send()
+      res.status(200).send();
     } catch (error) {
       console.log(error)
       res.status(400).send()
@@ -129,6 +129,7 @@ router.put('/form/:formConfigId', async (req, res, next) => {
   try {
     await formSave(req.body, req.params['formConfigId'])
     res.status(200).send()
+
   } catch (error) {
     console.log(error)
     res.status(400).send()
@@ -189,14 +190,13 @@ const formSave = async (obj, formConfigId) => {
   const formConfig = await db.collection('formConfig').findOne({_id: ObjectID(formConfigId)})
   const form = await db.collection('form').findOne({_id: ObjectID(formConfig.formId)})
   let objUpdate = {}
+
   // console.log('formSave')
   // console.log('formConfig', formConfig)
   // console.log('form', form)
   // console.log('obj', obj)
 
   // getObjInfo(obj)
-
-
   for (const [field, value] of Object.entries(obj)) {
     if (field === '_id') {
       continue
