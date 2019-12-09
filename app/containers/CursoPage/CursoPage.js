@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext } from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
 import {
@@ -8,13 +8,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Paper,
+  AppBar,
+  Typography,
+  Toolbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import CustomizedSnackbars from './../../components/CustomizedSnackbars';
 import apiService from './../../services/apiService';
 import CursoForm from './CursoForm';
-import CursoColegiadoForm from './CursoColegiadoForm';
 import ButtonsGroup from './ButtonsGroup';
 
 const formDefault = {
@@ -46,12 +47,14 @@ export default function CursoPage() {
   const classes = useStyles();
   const [form, setFormValues] = useState(formDefault);
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState({});
   const [dialogErrors, setDialogErrors] = useState([]);
   const [dialogErrorsOpen, setDialogErrorsOpen] = useState(false);
   const [profile, setProfile] = useState('');
   const [permissions, setPermissions] = useState([]);
   const [snackbar, setSnackbar] = useState(false);
   const stepMax = 4;
+  
   const resourcesOptions = [
     {
       name: 'braile',
@@ -139,7 +142,6 @@ export default function CursoPage() {
   const save = async () => {
     try {
       adjustForm(form);
-      console.log(form);
       const formConfigId = window.location.pathname.split('/')[2];
       const res = await apiService.request('put', 'form/' + formConfigId, {
         data: form,
@@ -158,6 +160,7 @@ export default function CursoPage() {
 
   const adjustForm = (obj = form) => {
     let errors = [];
+    let invalids = []
 
     //Vagas por Turnos
     obj = form;
@@ -182,7 +185,8 @@ export default function CursoPage() {
         if (field != 'possui' && value == null) {
           for (let option of resourcesOptions) {
             if (field == option.name) {
-              errors.push('Campo ' + option.label + ' não preenchido');
+              errors.push(`Campo '${option.label}' não preenchido`);
+              invalids.push(option.label)
             }
           }
         }
@@ -192,12 +196,23 @@ export default function CursoPage() {
         'Se não garantir condições para pessoas com deficiencias, limpar os radios',
       );
     }
+
     if (errors.length > 0) {
       throw errors;
     }
   };
 
   const nextStep = () => {
+    try {
+      adjustForm();
+
+    } catch (errors) {
+      setDialogErrors(errors);
+      setDialogErrorsOpen(true);
+      return;
+    }
+    
+
     switch (step) {
       case 1:
         if (canSee('tableVagas')) {
@@ -374,8 +389,6 @@ export default function CursoPage() {
     setSnackbar(false);
   };
 
-  const pageColegiado = () => {};
-
   return (
     <div className="page">
       <Helmet>
@@ -385,7 +398,11 @@ export default function CursoPage() {
           content="Curso page of React.js Boilerplate application"
         />
       </Helmet>
-      <h1>Censo ensino superior 2019</h1>
+      <AppBar position="relative">
+        <Toolbar >
+          <Typography variant="h1">Censo ensino superior 2019</Typography>
+        </Toolbar>
+      </AppBar>
 
       <CursoForm
         step={step}
@@ -399,6 +416,7 @@ export default function CursoPage() {
         handleChangeAccessibilityResources={handleChangeAccessibilityResources}
         handleChangeLaboratorio={handleChangeLaboratorio}
         profile={profile}
+        errors={errors}
       />
 
       <div className={classes.buttonsSteps}>

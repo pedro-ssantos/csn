@@ -153,7 +153,7 @@ export default function TableAccessibilityResources(props) {
           <TableBody>
             {options.map((option, index) => (
               <TableRow className={index % 2 ? '' : classes.tableCellOdd}>
-                <TableCell className={classes.tableCondensed}>
+                <TableCell className={classes.tableCondensed} error>
                   {option.label}
                   <HelpTooltip
                     title={

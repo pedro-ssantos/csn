@@ -6,10 +6,10 @@ import TextField from './../TextField';
 import {
   Button,
   Checkbox,
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   DialogTitle,
   FormControlLabel,
   Icon,
@@ -22,6 +22,7 @@ import {
   TableBody,
   Paper,
 } from '@material-ui/core';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,7 +39,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function TableForm(props) {
-
   const classes = useStyles();
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
@@ -54,18 +54,18 @@ export default function TableForm(props) {
     }
   }, [props.columns, props.rows]);
 
-  const getLinks = async (formId) => {
+  const getLinks = async formId => {
     try {
       const res = await apiService.request(
         'get',
-        'formConfig?formId='+formId,
+        'formConfig?formId=' + formId,
       );
       setFormConfigs(res.data);
       setLinkDialogOpen(true);
     } catch (error) {
       alert('Erro ao buscar histórico de mudanças');
     }
-  }
+  };
 
   return (
     <div>
@@ -74,9 +74,9 @@ export default function TableForm(props) {
           <TableHead>
             <TableRow>
               {columns.map(column => (
-              <TableCell>{column}</TableCell>
+                <TableCell>{column}</TableCell>
               ))}
-              <TableCell >Ação</TableCell>
+              <TableCell>Ação</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,15 +88,21 @@ export default function TableForm(props) {
                       <TableCell component="th" scope="row">
                         {field}
                       </TableCell>
-                    )
+                    );
                   }
                 })}
-                <TableCell component="th" scope="row" className={classes.tableCellAction}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className={classes.tableCellAction}
+                >
                   <IconButton onClick={props.logDialogHandleOpen}>
                     <Icon color="action">remove_red_eye</Icon>
                   </IconButton>
                   <IconButton>
-                    <Icon color="action" onClick={() => getLinks(fields[0])}>link</Icon>
+                    <Icon color="action" onClick={() => getLinks(fields[0])}>
+                      link
+                    </Icon>
                   </IconButton>
                   <IconButton>
                     <Icon color="action">list</Icon>
@@ -110,15 +116,16 @@ export default function TableForm(props) {
 
       <Dialog
         open={linkDialogOpen}
-        onClose={() => {setLinkDialogOpen(false)}}
+        onClose={() => {
+          setLinkDialogOpen(false);
+        }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth = {'md'}
+        maxWidth={'md'}
       >
         <DialogTitle id="alert-dialog-title">Links</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-
             <Table size="small">
               <TableHead>
                 <TableRow>
@@ -129,32 +136,46 @@ export default function TableForm(props) {
               </TableHead>
               <TableBody>
                 {formConfigs.map((formConfig, index) => (
-                <TableRow key={index}>
-                  <TableCell component="th" scope="row">
-                    {formConfig.responsible}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    <Link href={'/curso/'+formConfig._id} target="_blank" rel="noopener" className={classes.link}>
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row">
+                      {formConfig.responsible}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      <Link
+                        href={'/curso/' + formConfig._id}
+                        target="_blank"
+                        rel="noopener"
+                        className={classes.link}                        
+                      >
                         curso/{formConfig._id}
-                    </Link>
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {moment(formConfig.deadline).format('DD/MM/YY')}
-                  </TableCell>
-                </TableRow>
+                      </Link>
+                      <IconButton>
+                       <FileCopyIcon fontSize="small" onClick={ () => { 
+                         navigator.clipboard.writeText("http://18.229.171.45/curso/" + formConfig._id);
+                      }}/>
+                      </IconButton>
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {moment(formConfig.deadline).format('DD/MM/YY')}
+                    </TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>
-
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {setLinkDialogOpen(false)}} color="primary" autoFocus>
+          <Button
+            onClick={() => {
+              setLinkDialogOpen(false);
+            }}
+            color="primary"
+            autoFocus
+          >
             Fechar
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 }

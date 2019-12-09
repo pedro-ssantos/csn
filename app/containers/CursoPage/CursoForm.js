@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './style.scss';
-import { Fade, Collapse } from '@material-ui/core';
+import { Fade } from '@material-ui/core';
 import TableVagas from './../../components/TableVagas';
 import ChipSelect from './../../components/ChipSelect';
 import TableAccessibilityResources from './../../components/TableAccessibilityResources';
@@ -19,32 +19,13 @@ function CursoForm(props) {
     resourcesOptions,
     handleChangeAccessibilityResources,
     handleChangeLaboratorio,
+    errors,
   } = props;
 
   if (props.profile === 'colegiado' && step === 1) {
     nextStep();
   }
 
-  // if (props.profile === 'colegiado') {
-  //   return (
-  //     <React.Fragment>
-  //       <h3>{`Informações do curso ${form.nome}`}</h3>
-  //         <TableAccessibilityResources
-  //           tableLabel="Recursos de tecnologia assistiva disponíveis às pessoas com deficiência "
-  //           options={resourcesOptions}
-  //           accessibilityResources={form.accessibilityResources}
-  //           handleChangeAccessibilityResources={
-  //             handleChangeAccessibilityResources
-  //           }
-  //         />
-  //         <ChipSelect
-  //             laboratorios={form.laboratorios}
-  //             handleChange={handleChangeLaboratorio}
-  //             label="Laboratórios"
-  //           />
-  //     </React.Fragment>
-  //   );
-  // }
   return (
     <form autoComplete="off">
       <React.Fragment>
@@ -88,6 +69,7 @@ function CursoForm(props) {
                 handleChangeAccessibilityResources={
                   handleChangeAccessibilityResources
                 }
+                errors={errors}
               />
             )}
           </div>
