@@ -33,6 +33,8 @@ Senha: l9H7f5$cq?
 
 3 - Copiar a pasta gerada (build) para o servidor
 
+`scp -i censo.pem -r origem ubuntu@{endereço}:destino`
+
 4 - Iniciar o servidor (pm2):
 
 `pm2 start npm -- run start:prod`
