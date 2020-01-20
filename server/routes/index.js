@@ -276,7 +276,6 @@ const hasPermission = (field, formConfig) => {
 const getPerc = (obj) => {
   let fieldsCount = 10
   let fieldsAnswered = 0
-
   if (obj.codigoeMec != null) {            fieldsAnswered += 1 }
   if (obj.nome != null) {                  fieldsAnswered += 1 }
   if (obj.nivelAcademico != null) {        fieldsAnswered += 1 }
@@ -318,6 +317,7 @@ const getPerc = (obj) => {
   // acessibilidade
   fieldsCount += 1
   if (obj.accessibilityResources && obj.accessibilityResources.possui && obj.accessibilityResources.possui == 'Sim') {
+    fieldsAnswered += 1
     fieldsCount += 12
     const accessibilityResourcesFields = [
       'braile',
@@ -333,7 +333,7 @@ const getPerc = (obj) => {
       'insercaoDisciplinaSinais',
       'materialDigitalAcessivel',
     ]
-    for (let accessibilityResourcesField of accessibilityResourcesFields) {
+    for (let accessibilityResourcesField of accessibilityResourcesFields) { 
       if (obj.accessibilityResources[accessibilityResourcesField] != null) { fieldsAnswered += 1 }
     }
   }
