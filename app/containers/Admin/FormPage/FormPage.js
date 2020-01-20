@@ -70,9 +70,9 @@ export default function FormPage() {
           'form' + '?'+where.join('&'),
         );
         const formDb = resForm.data;
-        setColumns(['Nome', 'Período']);
+        setColumns(['Nome', 'Período', 'Preenchimento']);
         setRows(formDb.map(form => {
-          return [form.id, form.nome, form.period]
+          return [form.id, form.nome, form.period, form.percCompleted+'%']
         }));
       } catch (error) {
         alert('Formulário desconhecido');

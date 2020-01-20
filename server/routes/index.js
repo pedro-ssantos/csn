@@ -104,6 +104,7 @@ router.get('/form', async (req, res, next) => {
         id: form._id,
         deadline: formConfig[0].deadline,
         nome: form.nome,
+        percCompleted: getPerc(form),
         period: formConfig[0].period,
       }
     }))
@@ -270,6 +271,73 @@ const hasPermission = (field, formConfig) => {
     }
   }
   return false;
+}
+
+const getPerc = (obj) => {
+  let fieldsCount = 10
+  let fieldsAnswered = 0
+
+  if (obj.codigoeMec != null) {            fieldsAnswered += 1 }
+  if (obj.nome != null) {                  fieldsAnswered += 1 }
+  if (obj.nivelAcademico != null) {        fieldsAnswered += 1 }
+  if (obj.grauAcademico != null) {         fieldsAnswered += 1 }
+  if (obj.atributoIngresso != null) {      fieldsAnswered += 1 }
+  if (obj.modalidadeEnsino != null) {      fieldsAnswered += 1 }
+  if (obj.situacaoFuncionamento != null) { fieldsAnswered += 1 }
+  if (obj.alunoVinculado != null) {        fieldsAnswered += 1 }
+  if (obj.tipoOferta != null) {            fieldsAnswered += 1 }
+  if (obj.teveAlunoVinculado != null) {    fieldsAnswered += 1 }
+  // turnos
+  const turnos = ['matutino','vespertino','noturno','integral']
+  if (
+      obj.vagas.matutino.status == false && 
+      obj.vagas.vespertino.status == false && 
+      obj.vagas.noturno.status == false && 
+      obj.vagas.integral.status == false
+    ) {
+      // considera que o curso deve ter ao menos 1
+      fieldsCount += 7
+  } else {
+    for (let turno of turnos) {
+      if (obj.vagas[turno].status == true) {
+        fieldsCount += 7
+      }
+    }
+  }
+  for (let turno of turnos) {
+    if (obj.vagas[turno].status == true) {
+      if (obj.vagas[turno].prazoMinimoIntregralizacao != null) {       fieldsAnswered += 1 }
+      if (obj.vagas[turno].vagasNovas != null) {                       fieldsAnswered += 1 }
+      if (obj.vagas[turno].vagasRemanecentes != null) {                fieldsAnswered += 1 }
+      if (obj.vagas[turno].vagasProgramasEspeciais != null) {          fieldsAnswered += 1 }
+      if (obj.vagas[turno].inscritosVagasNovas != null) {              fieldsAnswered += 1 }
+      if (obj.vagas[turno].inscritosVagasRemanecentes != null) {       fieldsAnswered += 1 }
+      if (obj.vagas[turno].inscritosVagasProgramasEspeciais != null) { fieldsAnswered += 1 }
+    } 
+  }
+  // acessibilidade
+  fieldsCount += 1
+  if (obj.accessibilityResources && obj.accessibilityResources.possui && obj.accessibilityResources.possui == 'Sim') {
+    fieldsCount += 12
+    const accessibilityResourcesFields = [
+      'braile',
+      'informaticaAcessivel',
+      'materialTatil',
+      'tradutorSinais',
+      'materialSinais',
+      'materialImpressoAcessivel',
+      'materialAudio',
+      'materialCaractereAmpliado',
+      'recursoAcessComunicacao',
+      'guiaInterprete',
+      'insercaoDisciplinaSinais',
+      'materialDigitalAcessivel',
+    ]
+    for (let accessibilityResourcesField of accessibilityResourcesFields) {
+      if (obj.accessibilityResources[accessibilityResourcesField] != null) { fieldsAnswered += 1 }
+    }
+  }
+  return Math.round((fieldsAnswered/fieldsCount)*100)
 }
 
 const cursoModel = {
