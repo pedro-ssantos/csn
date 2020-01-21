@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { lighten, withStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import apiService from './../../../services/apiService';
 import { Helmet } from 'react-helmet';
 import LogDialog from './../../../components/LogDialog';
 import TableForm from './../../../components/TableForm';
 import './style.scss';
+
+const BorderLinearProgress = withStyles({
+  root: {
+    height: 10,
+  },
+  bar: {
+    borderRadius: 20,
+  },
+})(LinearProgress);
+
 
 export default function FormPage() {
 
@@ -72,7 +84,12 @@ export default function FormPage() {
         const formDb = resForm.data;
         setColumns(['Nome', 'Período', 'Preenchimento']);
         setRows(formDb.map(form => {
-          return [form.id, form.nome, form.period, form.percCompleted+'%']
+          return [form.id, form.nome, form.period,
+          <BorderLinearProgress
+          variant="determinate"
+          color={form.percCompleted >= 60 ? "primary" : "secondary"}
+          value={form.percCompleted}
+        />]
         }));
       } catch (error) {
         alert('Formulário desconhecido');
