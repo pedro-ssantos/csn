@@ -110,6 +110,7 @@ router.get('/form', async (req, res, next) => {
         nome: form.nome,
         percCompleted: getPerc(form),
         period: formConfig[0].period,
+        form: form
       }
     }))
   } catch (error) { console.log(error)
@@ -397,24 +398,7 @@ const cursoModel = {
       "inscritosVagasProgramasEspeciais": null
     }
   },
-  "deficiencia": {
-    "possui": null,
-    "recursos": {
-      "braile": null,
-      "informaticaAcessivel": null,
-      "materialPedagogicoTatil": null,
-      "tradutorInterpreteLinguaBrasileiraDeSinais": null,
-      "materialDidaticoLinguaBrasileiraDeSinais": null,
-      "materialDidaticoEmFormatoImpressoAcessivel": null,
-      "materialEmAudio": null,
-      "materialEmFormatoImpressoEmCaratereAmpliado": null,
-      "recursosDeAcessibilidadeAComunicacao": null,
-      "guiaInterprete": null,
-      "insercaoDaDisciplinaDeLinguaBrasileira": null,
-      "materialDidaticoDigitalAcessivel": null
-    }
-  },
-  "recursosAcessibilidade": {
+  "accessibilityResources": {
     "braile": null,
     "informaticaAcessivel": null,
     "materialTatil": null,
