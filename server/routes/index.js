@@ -47,7 +47,8 @@ router.all('/*', async(req, res, next) => {
 })
 
 router.get('/form/export', async (req, res, next) => {
-  console.log(req.url);
+  const forms = await getForms(req.query['period'], req.query['type'])
+  console.log(forms[0]);
 });
 
 router.post('/admin/form/', async (req, res, next) => {
@@ -75,7 +76,7 @@ router.post('/admin/form/', async (req, res, next) => {
         {
           id : "laboratorios",
           permission : "update"
-        }, 
+        },
       ]
       await db.collection('formConfig').insert(formConfigObj,{w:1})
       res.status(200).send();
@@ -89,34 +90,35 @@ router.post('/admin/form/', async (req, res, next) => {
 })
 
 router.get('/form', async (req, res, next) => {
-  let where = {}
-  if (req.query['period']) {
-    where.period = req.query['period']
-  }
-  if (req.query['type']) {
-    where.type = req.query['type']
-  }
   try {
-    const formConfig = await db.collection('formConfig').find(where).toArray()
-    const formIds = formConfig.map(form => {
-      return form.formId
-    })
-    const whereFormIds = formIds.length > 0 ? {_id: { $in : formIds }} : {}
-    const forms = await db.collection('form').find(whereFormIds).sort({ nome : 1 }).toArray()
-    res.status(200).json(forms.map(form => {
-      return {
-        id: form._id,
-        deadline: formConfig[0].deadline,
-        nome: form.nome,
-        percCompleted: getPerc(form),
-        period: formConfig[0].period,
-        form: form
-      }
-    }))
+    res.status(200).json(await getForms(req.query['period'], req.query['type']))
   } catch (error) { console.log(error)
     res.status(404).send()
   }
 })
+
+const getForms = async (period, type) => {
+  let where = {
+    period: period,
+    type: type,
+  }
+  const formConfig = await db.collection('formConfig').find(where).toArray()
+  const formIds = formConfig.map(form => {
+    return form.formId
+  })
+  const whereFormIds = formIds.length > 0 ? {_id: { $in : formIds }} : {}
+  const forms = await db.collection('form').find(whereFormIds).sort({ nome : 1 }).toArray()
+  return forms.map(form => {
+    return {
+      id: form._id,
+      deadline: formConfig[0].deadline,
+      nome: form.nome,
+      percCompleted: getPerc(form),
+      period: formConfig[0].period,
+      form: form
+    }
+  })
+}
 
 router.get('/form/:formId', async (req, res, next) => {
   try {
@@ -169,7 +171,7 @@ router.get('/formConfig/:formConfigId', async (req, res, next) => {
     } else {
       res.status(200).json(item)
     }
-  } catch (error) { 
+  } catch (error) {
     res.status(404).send()
   }
 })
@@ -178,7 +180,7 @@ router.get('/formLog/:formId', async (req, res, next) => {
   try {
     const collection = await db.collection('formLog').find({formId: ObjectID(req.params['formId'])}).toArray()
     res.status(200).json(collection)
-  } catch (error) { 
+  } catch (error) {
     res.status(404).send()
   }
 })
@@ -294,9 +296,9 @@ const getPerc = (obj) => {
   // turnos
   const turnos = ['matutino','vespertino','noturno','integral']
   if (
-      obj.vagas.matutino.status == false && 
-      obj.vagas.vespertino.status == false && 
-      obj.vagas.noturno.status == false && 
+      obj.vagas.matutino.status == false &&
+      obj.vagas.vespertino.status == false &&
+      obj.vagas.noturno.status == false &&
       obj.vagas.integral.status == false
     ) {
       // considera que o curso deve ter ao menos 1
@@ -317,7 +319,7 @@ const getPerc = (obj) => {
       if (obj.vagas[turno].inscritosVagasNovas != null) {              fieldsAnswered += 1 }
       if (obj.vagas[turno].inscritosVagasRemanecentes != null) {       fieldsAnswered += 1 }
       if (obj.vagas[turno].inscritosVagasProgramasEspeciais != null) { fieldsAnswered += 1 }
-    } 
+    }
   }
   // acessibilidade
   fieldsCount += 1
@@ -338,7 +340,7 @@ const getPerc = (obj) => {
       'insercaoDisciplinaSinais',
       'materialDigitalAcessivel',
     ]
-    for (let accessibilityResourcesField of accessibilityResourcesFields) { 
+    for (let accessibilityResourcesField of accessibilityResourcesFields) {
       if (obj.accessibilityResources[accessibilityResourcesField] != null) { fieldsAnswered += 1 }
     }
   }
