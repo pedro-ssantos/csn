@@ -46,6 +46,10 @@ router.all('/*', async(req, res, next) => {
   next()
 })
 
+router.get('/form/export', async (req, res, next) => {
+  console.log(req.url);
+});
+
 router.post('/admin/form/', async (req, res, next) => {
   if (req.headers.authorization == 'kkjk4j90jrf092jmc28sl2dk98gn3v9fa9') {
     try {
