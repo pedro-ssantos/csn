@@ -5,6 +5,9 @@ const ObjectID = require('mongodb').ObjectID
 const router = express.Router()
 const url = 'mongodb://localhost:27017'
 const moment = require('moment')
+const xlsx = require('./../xlsxexport/xlsx');
+
+
 let db
 
 const mongoConnect = async() => {
@@ -48,7 +51,8 @@ router.all('/*', async(req, res, next) => {
 
 router.get('/form/export', async (req, res, next) => {
   const forms = await getForms(req.query['period'], req.query['type'])
-  console.log(forms[0]);
+  console.log("fazfunfar");
+  xlsx.exportXlsx(forms);
 });
 
 router.post('/admin/form/', async (req, res, next) => {
